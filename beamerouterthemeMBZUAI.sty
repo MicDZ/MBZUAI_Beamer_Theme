@@ -22,6 +22,10 @@
         \hss}%
         % Title text with bottom spacing via raisebox
         \raisebox{0.8em}{\usebeamerfont{frametitle}\insertframetitle}%
+        \hfill
+        % Logo on the right
+        \raisebox{0.4em}{\includegraphics[height=2.2em]{logo_sand.pdf}}%
+        \hspace{1.5em}%
     \end{beamercolorbox}%
     \nointerlineskip
     % Sand separator line
@@ -30,8 +34,6 @@
 
 % ── Footer with logo and page number ───────────────────────────────────────
 \setbeamertemplate{footline}{%
-    \hspace{1.5em}%
-    \raisebox{0.5mm}{\includegraphics[height=10mm]{logo_converted.pdf}}%
     \hfill
     {\footnotesize \textcolor{mbzuai-subtle}{\insertframenumber{} / \inserttotalframenumber}}%
     \hspace{1.5em}%

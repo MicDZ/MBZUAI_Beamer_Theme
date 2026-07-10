@@ -4,6 +4,9 @@
 
 \mode<presentation>
 
+% ── Lengths for auto-scaling title ───────────────────────────────────────────
+\newlength{\mbzuaiTitleNat}
+
 % ── TOC section style (diamond marker) ─────────────────────────────────────
 \setbeamertemplate{section in toc}{%
     \leavevmode
@@ -23,10 +26,15 @@
         \fill[mbzuai-dark-navy]
             (current page.north west) rectangle +(\paperwidth, -28mm);
 
-        % Title
-        \node[anchor=north west, mbzuai-white, font=\Huge\bfseries]
+        % Title (auto-scale: max \Large, shrink if too long)
+        \node[anchor=north west, mbzuai-white]
             at ([yshift=-8mm, xshift=15mm]current page.north west)
-            {\inserttitle};
+            {\settowidth{\mbzuaiTitleNat}{\Huge\bfseries\inserttitle}%
+             \ifdim\mbzuaiTitleNat>\dimexpr\paperwidth-30mm\relax
+                 \resizebox{\dimexpr\paperwidth-30mm\relax}{!}{\textcolor{mbzuai-white}{\bfseries\inserttitle}}%
+             \else
+                 \textcolor{mbzuai-white}{\Huge\bfseries\inserttitle}%
+             \fi};
 
         % Subtitle
         \node[anchor=north west, mbzuai-sand, font=\large]
@@ -56,10 +64,10 @@
             (current page.north west) rectangle +(\paperwidth, -12mm);
     \end{tikzpicture}
 
-    \vspace{20mm}
+    \vspace{12mm}
     \begin{center}
-        {\Huge \textcolor{mbzuai-dark-navy}{\textbf{Thank You}}}\\[8mm]
-        {\Large \textcolor{mbzuai-navy}{Questions?}}\\[12mm]
+        {\Huge \textcolor{mbzuai-dark-navy}{\textbf{Thank You}}}\\[6mm]
+        {\Large \textcolor{mbzuai-navy}{Questions?}}\\[8mm]
         {\normalsize
         \textcolor{mbzuai-subtle}{\insertauthor}\\[2mm]
         \textcolor{mbzuai-subtle}{\insertinstitute}
