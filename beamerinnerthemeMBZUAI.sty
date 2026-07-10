@@ -7,6 +7,20 @@
 % ── Lengths for auto-scaling title ───────────────────────────────────────────
 \newlength{\mbzuaiTitleNat}
 
+% ── Title page logos (configurable via \titlelogos) ─────────────────────────
+\newcommand{\mbzuai@titlelogos}{}
+\newcommand{\titlelogos}[1]{\renewcommand{\mbzuai@titlelogos}{#1}}
+\newcommand{\mbzuai@makelogos}{%
+    \ifx\mbzuai@titlelogos\empty\else
+        \begin{center}%
+            \foreach \logo [count=\i] in \mbzuai@titlelogos {%
+                \ifnum\i>1\hspace{3mm}\fi
+                \includegraphics[height=12mm]{\logo}%
+            }%
+        \end{center}%
+    \fi
+}
+
 % ── TOC section style (diamond marker) ─────────────────────────────────────
 \setbeamertemplate{section in toc}{%
     \leavevmode
@@ -43,10 +57,15 @@
     \end{tikzpicture}
 
     \vspace{30mm}
+    % Adaptive layout: content fills available space
     \begin{center}
-        {\normalsize \textcolor{mbzuai-text}{\insertauthor}}\\[4mm]
-        {\small \textcolor{mbzuai-subtle}{\insertinstitute}}\\[4mm]
+        \vfill
+        {\normalsize \textcolor{mbzuai-text}{\insertauthor}}\\[3mm]
+        {\small \textcolor{mbzuai-subtle}{\insertinstitute}}\\[3mm]
         {\small \textcolor{mbzuai-subtle}{\insertdate}}
+        \vfill
+        \mbzuai@makelogos
+        \vskip 8mm
     \end{center}
 }
 
@@ -71,7 +90,8 @@
         {\normalsize
         \textcolor{mbzuai-subtle}{\insertauthor}\\[2mm]
         \textcolor{mbzuai-subtle}{\insertinstitute}
-        }
+        }\\[6mm]
+        \mbzuai@makelogos
     \end{center}
 }
 
