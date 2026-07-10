@@ -12,6 +12,43 @@ A LaTeX Beamer presentation theme based on the **Mohamed bin Zayed University of
 - 📊 Brand-colored tables
 - 🔷 Diamond bullet markers in table of contents
 
+## Preview
+
+<p align="center">
+  <img src="assets/slides/slide-01.jpg" width="800" alt="Title Slide"><br>
+  <em>Title Slide</em>
+</p>
+
+<p align="center">
+  <img src="assets/slides/slide-02.jpg" width="800" alt="Outline"><br>
+  <em>Outline</em>
+</p>
+
+<p align="center">
+  <img src="assets/slides/slide-04.jpg" width="800" alt="Content with Blocks"><br>
+  <em>Content with Blocks</em>
+</p>
+
+<p align="center">
+  <img src="assets/slides/slide-05.jpg" width="800" alt="Two Column Layout"><br>
+  <em>Two Column Layout</em>
+</p>
+
+<p align="center">
+  <img src="assets/slides/slide-07.jpg" width="800" alt="TikZ Diagram"><br>
+  <em>TikZ Diagram</em>
+</p>
+
+<p align="center">
+  <img src="assets/slides/slide-08.jpg" width="800" alt="Table Example"><br>
+  <em>Table Example</em>
+</p>
+
+<p align="center">
+  <img src="assets/slides/slide-10.jpg" width="800" alt="Thank You Slide"><br>
+  <em>Thank You Slide</em>
+</p>
+
 ## Installation
 
 ### Option 1: Local (recommended)
