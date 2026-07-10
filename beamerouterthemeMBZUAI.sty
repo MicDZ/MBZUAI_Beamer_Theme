@@ -11,7 +11,7 @@
 \setbeamertemplate{frametitle}{%
     \nointerlineskip
     % Outer box: full banner height, no depth (banner extends to bottom)
-    \begin{beamercolorbox}[wd=\paperwidth, ht=3.3em, dp=0.0em, leftskip=1.5em]{frametitle}%
+    \begin{beamercolorbox}[wd=\paperwidth, ht=2.5em, dp=0.0em, leftskip=1.5em]{frametitle}%
         % Composite banner overlay (zero width, doesn't affect layout)
         \hbox to0pt{%
             \tikz{
@@ -21,10 +21,10 @@
             }%
         \hss}%
         % Title text with bottom spacing via raisebox
-        \raisebox{0.8em}{\usebeamerfont{frametitle}\insertframetitle}%
+        \raisebox{0.6em}{\usebeamerfont{frametitle}\insertframetitle}%
         \hfill
         % Logo on the right
-        \raisebox{0.4em}{\includegraphics[height=2.2em]{logo_sand.pdf}}%
+        \raisebox{0.3em}{\includegraphics[height=1.8em]{logo_sand.pdf}}%
         \hspace{1.5em}%
     \end{beamercolorbox}%
     \nointerlineskip
@@ -32,11 +32,29 @@
     \tikz{\fill[mbzuai-sand] (0,0) rectangle (\paperwidth, 1.5pt);}
 }
 
-% ── Footer with logo and page number ───────────────────────────────────────
+% ── Footer with banner background, title, subtitle, page number ─────────────
 \setbeamertemplate{footline}{%
-    \hfill
-    {\footnotesize \textcolor{mbzuai-subtle}{\insertframenumber{} / \inserttotalframenumber}}%
-    \hspace{1.5em}%
+    \leavevmode%
+    % Full-width banner background
+    \tikz[remember picture, overlay]{%
+        \node[anchor=south west, inner sep=0, outer sep=0]
+            at (current page.south west)
+            {\includegraphics[width=\paperwidth, height=3em]{banner-bg.pdf}};
+    }%
+    % Content
+    \begin{beamercolorbox}[wd=\paperwidth, ht=0pt, dp=1.5em, leftskip=3em, rightskip=3em]{footline}%
+        \raisebox{-0.7em}[1.5em][0em]{%
+            {\footnotesize \textcolor{white}{\textbf{\inserttitle}}}%
+            \hspace{1.2em}%
+            {\footnotesize \textcolor{mbzuai-sand}{|}}%
+            \hspace{1.2em}%
+            {\footnotesize \textcolor{white}{\insertsubtitle}}%
+        }%
+        \hfill
+        \raisebox{-0.7em}[1.5em][0em]{%
+            {\footnotesize \textcolor{white}{\insertframenumber{} / \inserttotalframenumber}}%
+        }%
+    \end{beamercolorbox}%
 }
 
 \mode<all>
