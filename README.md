@@ -1,99 +1,99 @@
-# MBZUAI Beamer Theme
+# MBZUAI Beamer 主题
 
-A LaTeX Beamer presentation theme based on the **Mohamed bin Zayed University of Artificial Intelligence (MBZUAI)** brand guidelines (March 2026, V1).
+基于**穆罕默德·本·扎耶德人工智能大学（MBZUAI）**品牌指南（2026年3月，V1）的 LaTeX Beamer 演示文稿主题。
 
-## Features
+## 特性
 
-- 🎨 Official MBZUAI brand colors
-- 📐 16:9 widescreen layout
-- 🖼️ Frametitle banner with subtle pattern background
-- 📄 Custom title page and "Thank You" slide
-- 🧱 Styled blocks (standard, alert, example)
-- 📊 Brand-colored tables
-- 🔷 Diamond bullet markers in table of contents
+- 🎨 官方 MBZUAI 品牌配色
+- 📐 16:9 宽屏布局
+- 🖼️ 带有纹理背景的标题栏横幅
+- 📄 自定义首页和尾页（Thank You）
+- 🧱 品牌风格的 Block（标准、警告、示例）
+- 📊 品牌配色表格
+- 🔷 目录中的菱形标记
 
-## Preview
+## 预览
 
 <p align="center">
-  <img src="assets/slides/slide-01.jpg" width="800" alt="Title Slide"><br>
-  <em>Title Slide</em>
+  <img src="assets/slides/slide-01.jpg" width="800" alt="首页"><br>
+  <em>首页</em>
 </p>
 
 <p align="center">
-  <img src="assets/slides/slide-02.jpg" width="800" alt="Outline"><br>
-  <em>Outline</em>
+  <img src="assets/slides/slide-02.jpg" width="800" alt="目录"><br>
+  <em>目录</em>
 </p>
 
 <p align="center">
-  <img src="assets/slides/slide-04.jpg" width="800" alt="Content with Blocks"><br>
-  <em>Content with Blocks</em>
+  <img src="assets/slides/slide-04.jpg" width="800" alt="内容页"><br>
+  <em>内容页（Block）</em>
 </p>
 
 <p align="center">
-  <img src="assets/slides/slide-05.jpg" width="800" alt="Two Column Layout"><br>
-  <em>Two Column Layout</em>
+  <img src="assets/slides/slide-05.jpg" width="800" alt="双栏布局"><br>
+  <em>双栏布局</em>
 </p>
 
 <p align="center">
-  <img src="assets/slides/slide-07.jpg" width="800" alt="TikZ Diagram"><br>
-  <em>TikZ Diagram</em>
+  <img src="assets/slides/slide-07.jpg" width="800" alt="TikZ 图表"><br>
+  <em>TikZ 图表</em>
 </p>
 
 <p align="center">
-  <img src="assets/slides/slide-08.jpg" width="800" alt="Table Example"><br>
-  <em>Table Example</em>
+  <img src="assets/slides/slide-08.jpg" width="800" alt="表格示例"><br>
+  <em>表格示例</em>
 </p>
 
 <p align="center">
-  <img src="assets/slides/slide-10.jpg" width="800" alt="Thank You Slide"><br>
-  <em>Thank You Slide</em>
+  <img src="assets/slides/slide-10.jpg" width="800" alt="尾页"><br>
+  <em>尾页</em>
 </p>
 
-## Installation
+## 安装
 
-### Option 1: Local (recommended)
+### 方式一：本地安装（推荐）
 
-Copy the `beamerthemeMBZUAI/` directory to your project:
+将 `beamerthemeMBZUAI/` 目录复制到你的项目中：
 
 ```bash
 cp -r beamerthemeMBZUAI/ /path/to/your/project/
 ```
 
-### Option 2: TeXMF (system-wide)
+### 方式二：TeXMF 全局安装
 
 ```bash
 cp -r beamerthemeMBZUAI/ ~/Library/texmf/tex/latex/beamer/
 ```
 
-## Usage
+## 使用方法
 
 ```latex
 \documentclass[aspectratio=169, 11pt]{beamer}
 
 \usetheme{MBZUAI}
 
-\title[Short Title]{Your Presentation Title}
-\subtitle{Subtitle Here}
-\author[Author Name]{Author Name \\ \texttt{author@mbzuai.ac.ae}}
-\institute[MBZUAI]{Mohamed bin Zayed University of Artificial Intelligence}
+\title[短标题]{演示文稿标题}
+\subtitle{副标题}
+\author[作者姓名]{作者姓名 \\ \texttt{author@mbzuai.ac.ae}}
+\institute[MBZUAI]{穆罕默德·本·扎耶德人工智能大学}
 \date{\today}
 
 \begin{document}
 
-% Title slide (automatic)
+% 首页（自动生成）
 \begin{frame}[t]
 \titlepage
 \end{frame}
 
-% Content slides
-\section{Introduction}
-\begin{frame}{Introduction}
+% 内容页
+\section{简介}
+\begin{frame}{简介}
     \begin{itemize}
-        \item Your content here
+        \item 你的内容
     \end{itemize}
 \end{frame}
 
-% Thank You slide
+% 尾页
 {
 \setbeamertemplate{footline}{}
 \setbeamertemplate{frametitle}{}
@@ -105,43 +105,43 @@ cp -r beamerthemeMBZUAI/ ~/Library/texmf/tex/latex/beamer/
 \end{document}
 ```
 
-## Available Colors
+## 可用颜色
 
-| Color | Hex | Usage |
-|-------|-----|-------|
-| `mbzuai-dark-navy` | `#0C2945` | Primary backgrounds, headers |
-| `mbzuai-navy` | `#154677` | Secondary backgrounds |
-| `mbzuai-sand` | `#E5C687` | Accent elements, highlights |
-| `mbzuai-dark-sand` | `#8A764D` | Secondary accents |
-| `mbzuai-light-gray` | `#F5F5F5` | Block backgrounds |
-| `mbzuai-text` | `#1A1A1A` | Body text |
-| `mbzuai-subtle` | `#666666` | Secondary text |
+| 颜色名称 | 色值 | 用途 |
+|----------|------|------|
+| `mbzuai-dark-navy` | `#0C2945` | 主背景、标题栏 |
+| `mbzuai-navy` | `#154677` | 次背景、渐变 |
+| `mbzuai-sand` | `#E5C687` | 强调元素、高亮 |
+| `mbzuai-dark-sand` | `#8A764D` | 次强调色 |
+| `mbzuai-light-gray` | `#F5F5F5` | Block 背景 |
+| `mbzuai-text` | `#1A1A1A` | 正文文字 |
+| `mbzuai-subtle` | `#666666` | 次要文字 |
 
-Use these colors in your presentation:
+使用示例：
 
 ```latex
-\textcolor{mbzuai-navy}{\textbf{Important text}}
-\color{mbzuai-sand} highlighted text
+\textcolor{mbzuai-navy}{\textbf{重要文字}}
+\color{mbzuai-sand} 高亮文字
 ```
 
-## Customization
+## 自定义
 
-### Thank You Slide
+### 尾页（Thank You）
 
-The `\mbzuaiThankYou` macro creates a "Thank You" slide with:
-- Subtle pattern background
-- Navy header bar
-- "Thank You" title
-- "Questions?" subtitle
-- Email and institute from `\insertemail` and `\insertinstitute`
+`\mbzuaiThankYou` 宏生成尾页，包含：
+- 纹理背景
+- 深蓝顶部栏
+- "Thank You" 标题
+- "Questions?" 副标题
+- 作者和机构信息
 
-### Title Page
+### 首页
 
-The title page is automatically generated from `\title`, `\subtitle`, `\author`, `\institute`, and `\date`.
+首页由 `\title`、`\subtitle`、`\author`、`\institute` 和 `\date` 自动生成，标题字号为 `\Huge`，超长时自动缩小以适应页面宽度。
 
-## Regenerating the Banner
+## 重新生成横幅
 
-The frametitle banner (`assets/banner-bg.pdf`) is pre-built. To regenerate it:
+标题栏横幅（`assets/banner-bg.pdf`）已预构建。如需重新生成：
 
 ```bash
 cd assets/
@@ -149,10 +149,10 @@ pdflatex make-banner-bg.tex
 cp make-banner-bg.pdf banner-bg.pdf
 ```
 
-**Note:** Regenerating requires the MBZUAI pattern asset:
+**注意：** 重新生成需要 MBZUAI 纹理素材：
 `MBZUAI-Patterns/CROPS/CMYK/PDF/MBZUAI_PATTERN_CROP 01_NAVY_CMYK.pdf`
 
-## Building the Demo
+## 编译
 
 **推荐使用 `latexmk`（自动处理多次编译）：**
 
@@ -171,32 +171,34 @@ pdflatex demo.tex  # 确保所有 overlay 渲染正确
 
 > **⚠️ 为什么需要多次编译？**
 >
-> 首页和尾页的背景（pattern、navy bar）使用了 TikZ 的 `remember picture, overlay` 机制，需要将节点绝对位置写入 `.aux` 文件后再次读取才能正确定位。第一次编译记录位置，第二次编译才能正确渲染背景。这是 LaTeX 的固有行为。
+> 首页和尾页的背景（纹理、深蓝栏）使用了 TikZ 的 `remember picture, overlay` 机制，需要将节点绝对位置写入 `.aux` 文件后再次读取才能正确定位。第一次编译记录位置，第二次编译才能正确渲染背景。这是 LaTeX 的固有行为。
 
-## File Structure
+## 文件结构
 
 ```
 beamerthemeMBZUAI/
-├── beamerthemeMBZUAI.sty          # Main theme loader
-├── beamercolorthemeMBZUAI.sty     # Brand color definitions
-├── beamerinnerthemeMBZUAI.sty     # Title page, Thank You, blocks
-├── beamerouterthemeMBZUAI.sty     # Frametitle, footline
-├── beamerfontthemeMBZUAI.sty      # Font settings
+├── beamerthemeMBZUAI.sty          # 主题入口
+├── beamercolorthemeMBZUAI.sty     # 品牌颜色定义
+├── beamerinnerthemeMBZUAI.sty     # 首页、尾页、Block
+├── beamerouterthemeMBZUAI.sty     # 标题栏、页脚
+├── beamerfontthemeMBZUAI.sty      # 字体设置
 ├── assets/
-│   ├── banner-bg.pdf              # Frametitle banner background
-│   ├── pattern-bg.pdf             # Title/Thank You pattern
-│   └── make-banner-bg.tex         # Banner source
-├── demo.tex                       # Example presentation
-├── README.md                      # This file
-└── LICENSE                        # MIT License
+│   ├── banner-bg.pdf              # 标题栏横幅背景
+│   ├── pattern-bg.pdf             # 首页/尾页纹理
+│   ├── logo_sand.pdf              # 沙色 Logo（标题栏）
+│   ├── logo_dark.pdf              # 深色 Logo（首页/尾页）
+│   └── make-banner-bg.tex         # 横幅源文件
+├── demo.tex                       # 示例演示文稿
+├── README.md                      # 本文件
+└── LICENSE                        # MIT 许可证
 ```
 
-## License
+## 许可证
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT 许可证 — 详见 [LICENSE](LICENSE)。
 
-## Brand Guidelines
+## 品牌指南
 
-This theme is based on the official MBZUAI Brand Guidelines (March 2026, V1). For the authoritative brand rules, refer to the official document.
+本主题基于 MBZUAI 官方品牌指南（2026年3月，V1）。品牌规范以官方文档为准。
 
-**Pattern assets** are © Mohamed bin Zayed University of Artificial Intelligence and are included with permission for use in presentations.
+**纹理素材**版权归穆罕默德·本·扎耶德人工智能大学所有，已获授权用于演示文稿。
