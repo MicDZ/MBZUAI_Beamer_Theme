@@ -28,4 +28,14 @@
 \useinnertheme{MBZUAI}
 \useoutertheme{MBZUAI}
 
+% ── Fix vertical centering: symmetric fills ────────────────────────────────
+\AtBeginDocument{%
+    \define@key{beamerframe}{c}[true]{%
+        \beamer@frametopskip=0pt plus 1fill\relax%
+        \beamer@framebottomskip=0pt plus 1fill\relax%
+        \beamer@frametopskipautobreak=0pt plus 1fill\relax%
+        \beamer@framebottomskipautobreak=0pt plus 1fill\relax%
+    }%
+}
+
 \mode<all>

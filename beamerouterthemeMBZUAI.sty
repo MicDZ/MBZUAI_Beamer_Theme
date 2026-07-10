@@ -36,31 +36,32 @@
         \hspace{1.5em}%
     \end{beamercolorbox}%
     \nointerlineskip
-    % Sand separator line
-    \tikz{\fill[mbzuai-sand] (0,0) rectangle (\paperwidth, 1.5pt);}
+    % Sand separator line (overlay, no extra space)
+    \tikz[remember picture, overlay]{\fill[mbzuai-sand] (current page.north west) ++(0,-2.5em) rectangle ++(\paperwidth,-1.5pt);}
 }
 
 % ── Footer with banner background and customizable content ────────────────────
 \setbeamertemplate{footline}{%
     \leavevmode%
-    % Full-width banner background
-    \tikz[remember picture, overlay]{%
-        \node[anchor=south west, inner sep=0, outer sep=0]
-            at (current page.south west)
-            {\includegraphics[width=\paperwidth, height=3em]{banner-bg.pdf}};
-    }%
-    % Content
-    \begin{beamercolorbox}[wd=\paperwidth, ht=0pt, dp=1.5em, leftskip=3em, rightskip=3em]{footline}%
-        \raisebox{-0.7em}[1.5em][0em]{%
+    % Content with correct height for beamer's textheight calculation
+    \begin{beamercolorbox}[wd=\paperwidth, ht=3em, dp=0em, leftskip=3em, rightskip=3em,vmode]{footline}%
+        % Banner background overlay (positioned at bottom of page)
+        \tikz[remember picture, overlay]{%
+            \node[anchor=south west, inner sep=0, outer sep=0]
+                at (current page.south west)
+                {\includegraphics[width=\paperwidth, height=3em]{banner-bg.pdf}};
+        }%
+        % Vertically center text
+        \vbox to 3em{%
+            \vfil
             {\footnotesize \textcolor{white}{\mbzuai@footleft}}%
             \hspace{1.2em}%
             {\footnotesize \textcolor{mbzuai-sand}{|}}%
             \hspace{1.2em}%
             {\footnotesize \textcolor{white}{\mbzuai@footmid}}%
-        }%
-        \hfill
-        \raisebox{-0.7em}[1.5em][0em]{%
+            \hfill
             {\footnotesize \textcolor{white}{\mbzuai@footright}}%
+            \vfil
         }%
     \end{beamercolorbox}%
 }
