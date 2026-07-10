@@ -1,0 +1,40 @@
+% beamerouterthemeMBZUAI.sty
+% MBZUAI Outer Theme: Frametitle and Footline
+% Based on MBZUAI Brand Guidelines (March 2026, V1)
+
+\mode<presentation>
+
+% ── Remove navigation symbols ──────────────────────────────────────────────
+\setbeamertemplate{navigation symbols}{}
+
+% ── Frametitle with composite banner background ────────────────────────────
+\setbeamertemplate{frametitle}{%
+    \nointerlineskip
+    % Outer box: full banner height, no depth (banner extends to bottom)
+    \begin{beamercolorbox}[wd=\paperwidth, ht=3.3em, dp=0.0em, leftskip=1.5em]{frametitle}%
+        % Composite banner overlay (zero width, doesn't affect layout)
+        \hbox to0pt{%
+            \tikz{
+                \node[anchor=north west, inner sep=0]
+                    at (0, 0)
+                    {\includegraphics[width=\paperwidth]{banner-bg.pdf}};
+            }%
+        \hss}%
+        % Title text with bottom spacing via raisebox
+        \raisebox{0.8em}{\usebeamerfont{frametitle}\insertframetitle}%
+    \end{beamercolorbox}%
+    \nointerlineskip
+    % Sand separator line
+    \tikz{\fill[mbzuai-sand] (0,0) rectangle (\paperwidth, 1.5pt);}
+}
+
+% ── Footer with logo and page number ───────────────────────────────────────
+\setbeamertemplate{footline}{%
+    \hspace{1.5em}%
+    \raisebox{0.5mm}{\includegraphics[height=10mm]{logo_converted.pdf}}%
+    \hfill
+    {\footnotesize \textcolor{mbzuai-subtle}{\insertframenumber{} / \inserttotalframenumber}}%
+    \hspace{1.5em}%
+}
+
+\mode<all>

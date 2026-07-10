@@ -1,0 +1,70 @@
+% beamerinnerthemeMBZUAI.sty
+% MBZUAI Inner Theme: Title page, blocks, TOC
+% Based on MBZUAI Brand Guidelines (March 2026, V1)
+
+\mode<presentation>
+
+% ── TOC section style (diamond marker) ─────────────────────────────────────
+\setbeamertemplate{section in toc}{%
+    \leavevmode
+    \tikz[baseline]{\fill[mbzuai-navy] (0,0.15) -- ++(2mm,2mm) -- ++(2mm,-2mm) -- ++(-2mm,-2mm) -- cycle;}
+    \hspace{4mm}{\inserttocsection}\par\vspace{2mm}
+}
+
+% ── Title Page ──────────────────────────────────────────────────────────────
+\setbeamertemplate{title page}{%
+    \begin{tikzpicture}[remember picture, overlay]
+        % Pattern background — low opacity, behind content
+        \node[anchor=center, inner sep=0, opacity=0.06]
+            at (current page.center)
+            {\includegraphics[width=\paperwidth]{pattern-bg.pdf}};
+
+        % Top navy bar
+        \fill[mbzuai-dark-navy]
+            (current page.north west) rectangle +(\paperwidth, -28mm);
+
+        % Title
+        \node[anchor=north west, mbzuai-white, font=\Huge\bfseries]
+            at ([yshift=-8mm, xshift=15mm]current page.north west)
+            {\inserttitle};
+
+        % Subtitle
+        \node[anchor=north west, mbzuai-sand, font=\large]
+            at ([yshift=-18mm, xshift=15mm]current page.north west)
+            {\insertsubtitle};
+    \end{tikzpicture}
+
+    \vspace{30mm}
+    \begin{center}
+        {\normalsize \textcolor{mbzuai-text}{\insertauthor}}\\[4mm]
+        {\small \textcolor{mbzuai-subtle}{\insertinstitute}}\\[4mm]
+        {\small \textcolor{mbzuai-subtle}{\insertdate}}
+    \end{center}
+}
+
+% ── Thank You Slide ────────────────────────────────────────────────────────
+% Usage: \begin{frame} \mbzuaiThankYou \end{frame}
+\newcommand{\mbzuaiThankYou}{%
+    \begin{tikzpicture}[remember picture, overlay]
+        % Pattern background — low opacity
+        \node[anchor=center, inner sep=0, opacity=0.06]
+            at (current page.center)
+            {\includegraphics[width=\paperwidth]{pattern-bg.pdf}};
+
+        % Top navy bar
+        \fill[mbzuai-dark-navy]
+            (current page.north west) rectangle +(\paperwidth, -12mm);
+    \end{tikzpicture}
+
+    \vspace{20mm}
+    \begin{center}
+        {\Huge \textcolor{mbzuai-dark-navy}{\textbf{Thank You}}}\\[8mm]
+        {\Large \textcolor{mbzuai-navy}{Questions?}}\\[12mm]
+        {\normalsize
+        \textcolor{mbzuai-subtle}{\insertauthor}\\[2mm]
+        \textcolor{mbzuai-subtle}{\insertinstitute}
+        }
+    \end{center}
+}
+
+\mode<all>
