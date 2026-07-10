@@ -154,11 +154,24 @@ cp make-banner-bg.pdf banner-bg.pdf
 
 ## Building the Demo
 
+**推荐使用 `latexmk`（自动处理多次编译）：**
+
 ```bash
 cd beamerthemeMBZUAI/
-pdflatex demo.tex
-pdflatex demo.tex  # Run twice for TOC
+latexmk -pdf demo.tex
 ```
+
+**或手动编译（至少两次）：**
+
+```bash
+pdflatex demo.tex
+pdflatex demo.tex
+pdflatex demo.tex  # 确保所有 overlay 渲染正确
+```
+
+> **⚠️ 为什么需要多次编译？**
+>
+> 首页和尾页的背景（pattern、navy bar）使用了 TikZ 的 `remember picture, overlay` 机制，需要将节点绝对位置写入 `.aux` 文件后再次读取才能正确定位。第一次编译记录位置，第二次编译才能正确渲染背景。这是 LaTeX 的固有行为。
 
 ## File Structure
 
