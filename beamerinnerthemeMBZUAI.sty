@@ -31,7 +31,7 @@
             at ([yshift=-8mm, xshift=15mm]current page.north west)
             {\settowidth{\mbzuaiTitleNat}{\Huge\bfseries\inserttitle}%
              \ifdim\mbzuaiTitleNat>\dimexpr\paperwidth-30mm\relax
-                 \resizebox{\dimexpr\paperwidth-30mm\relax}{!}{\textcolor{mbzuai-white}{\bfseries\inserttitle}}%
+                 \parbox[t]{\dimexpr\paperwidth-30mm\relax}{\raggedright\textcolor{mbzuai-white}{\Large\bfseries\inserttitle}}%
              \else
                  \textcolor{mbzuai-white}{\Huge\bfseries\inserttitle}%
              \fi};
