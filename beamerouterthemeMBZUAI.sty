@@ -7,6 +7,14 @@
 % ── Remove navigation symbols ──────────────────────────────────────────────
 \setbeamertemplate{navigation symbols}{}
 
+% ── Customizable footer commands ──────────────────────────────────────────────
+\newcommand{\mbzuai@footleft}{}
+\newcommand{\mbzuai@footmid}{}
+\newcommand{\mbzuai@footright}{}
+\newcommand{\footleft}[1]{\renewcommand{\mbzuai@footleft}{#1}}
+\newcommand{\footmid}[1]{\renewcommand{\mbzuai@footmid}{#1}}
+\newcommand{\footright}[1]{\renewcommand{\mbzuai@footright}{#1}}
+
 % ── Frametitle with composite banner background ────────────────────────────
 \setbeamertemplate{frametitle}{%
     \nointerlineskip
@@ -32,7 +40,7 @@
     \tikz{\fill[mbzuai-sand] (0,0) rectangle (\paperwidth, 1.5pt);}
 }
 
-% ── Footer with banner background, title, subtitle, page number ─────────────
+% ── Footer with banner background and customizable content ────────────────────
 \setbeamertemplate{footline}{%
     \leavevmode%
     % Full-width banner background
@@ -44,15 +52,15 @@
     % Content
     \begin{beamercolorbox}[wd=\paperwidth, ht=0pt, dp=1.5em, leftskip=3em, rightskip=3em]{footline}%
         \raisebox{-0.7em}[1.5em][0em]{%
-            {\footnotesize \textcolor{white}{\textbf{\inserttitle}}}%
+            {\footnotesize \textcolor{white}{\mbzuai@footleft}}%
             \hspace{1.2em}%
             {\footnotesize \textcolor{mbzuai-sand}{|}}%
             \hspace{1.2em}%
-            {\footnotesize \textcolor{white}{\insertsubtitle}}%
+            {\footnotesize \textcolor{white}{\mbzuai@footmid}}%
         }%
         \hfill
         \raisebox{-0.7em}[1.5em][0em]{%
-            {\footnotesize \textcolor{white}{\insertframenumber{} / \inserttotalframenumber}}%
+            {\footnotesize \textcolor{white}{\mbzuai@footright}}%
         }%
     \end{beamercolorbox}%
 }
