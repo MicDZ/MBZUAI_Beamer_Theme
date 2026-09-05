@@ -105,6 +105,19 @@ cp -r beamerthemeMBZUAI/ ~/Library/texmf/tex/latex/beamer/
 \end{document}
 ```
 
+## Research Paper Presentation Template
+
+`templates/paper-presentation.tex.in` provides an evidence-driven 16:9 paper-talk starter used by the companion [paper-presentation-slides skill](https://github.com/MicDZ/paper-presentation-slides-skill). It includes:
+
+- explicit paper-author and presenter attribution;
+- configurable left, center, and right footer fields;
+- question/thesis, method, evaluation, evidence, and assessment frame patterns;
+- a formula frame with a visible notation table and operational-meaning block;
+- compact frame-level source locators;
+- the standard MBZUAI title and closing frames.
+
+The `.tex.in` file uses `@@NAME@@` placeholders for the companion initializer. New projects fetch the template and theme from this repository, record the resolved Git commit, and keep a local copy so the generated deck remains reproducible. Existing projects can refresh the theme files without overwriting their paper-specific `main.tex`.
+
 ## Available Colors
 
 | Color | Hex | Usage |
@@ -189,6 +202,8 @@ beamerthemeMBZUAI/
 │   ├── logo_dark.pdf              # Dark logo (title/Thank You)
 │   └── make-banner-bg.tex         # Banner source
 ├── demo.tex                       # Example presentation
+├── templates/
+│   └── paper-presentation.tex.in  # Evidence-driven paper-talk template
 ├── README.md                      # This file
 └── LICENSE                        # MIT License
 ```
