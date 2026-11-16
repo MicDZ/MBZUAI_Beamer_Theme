@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@@TITLE@@</title>
+<!--
+  MBZUAI HTML paper-presentation template.
+  HTML counterpart of templates/paper-presentation.tex.in (same @@NAME@@ placeholders).
+  Expects the contents of this repository's html/ directory to be copied to ./theme/.
+  Authoring reference: theme/AUTHORING.md
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="theme/mbzuai-slides.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="theme/mbzuai-slides.js"></script>
+
+<script type="application/json" id="katex-macros">
+{
+  "\\R": "\\mathbb{R}",
+  "\\E": "\\mathbb{E}"
+}
+</script>
+
+<!-- Paste the paper's BibTeX here (only cited keys appear in References). -->
+<script type="text/x-bibtex" id="bibliography">
+</script>
+</head>
+<body>
+
+<main class="deck"
+      data-short-title="@@SHORT_TITLE@@"
+      data-foot-left="@@FOOT_LEFT@@"
+      data-foot-mid="@@FOOT_CENTER@@"
+      data-foot-right="@@FOOT_RIGHT@@"
+      data-cite-style="numeric"
+      data-slide-refs="true">
+
+  <section class="slide title-slide" data-logos="mbzuai">
+    <h1>@@TITLE@@</h1>
+    <p class="subtitle">@@SUBTITLE@@</p>
+    <p class="author">Paper by @@AUTHORS@@</p>
+    <p class="presenter">Presented by <em>@@PRESENTER@@</em></p>
+    <p class="institute">@@VENUE@@</p>
+    <p class="date">@@DATE@@</p>
+  </section>
+
+  <!-- Build an argument, not a copy of the paper's section order. -->
+
+  <!-- ─────────────────────────── Question and Thesis ─────────────────────────── -->
+  <section class="slide" data-section="Question and Thesis">
+    <h2>The paper's central question in one sentence</h2>
+    <div class="columns">
+      <div class="column" style="--w:31%">
+        <h4>Input</h4>
+        <p class="small">State what the method receives.</p>
+      </div>
+      <div class="column" style="--w:34%">
+        <h4>Output</h4>
+        <p class="small">State what it must produce or predict.</p>
+      </div>
+      <div class="column" style="--w:31%">
+        <h4>Why it is hard</h4>
+        <p class="small">Name the uncertainty, bottleneck, or tradeoff.</p>
+      </div>
+    </div>
+    <p class="source">Paper Sec. 1</p>
+  </section>
+
+  <section class="slide" data-section="Question and Thesis">
+    <h2>The thesis should answer the question</h2>
+    <div class="block" data-title="Paper's thesis">Replace this with one precise, source-backed claim.</div>
+    <div class="block alert" data-title="Presenter roadmap">Name the minimum method mechanism and decisive evidence needed to evaluate it.</div>
+    <p class="source">Paper Secs. 1 and 3</p>
+  </section>
+
+  <!-- ─────────────────────────── Method ─────────────────────────── -->
+  <section class="slide" data-section="Method">
+    <h2>The method title should state what changes and why</h2>
+    <div class="columns c">
+      <div class="column" style="--w:58%">
+        <figure id="fig:overview">
+          <!-- <img src="figures/overview.png" style="max-height:360px" alt="Method overview"> -->
+          <div class="placeholder" style="height:300px">Place one legible original or adapted figure here.</div>
+          <figcaption>Method overview (adapted from the paper, Fig. X).</figcaption>
+        </figure>
+      </div>
+      <div class="column small">
+        <ol>
+          <li>Name the representation or state.</li>
+          <li>Explain the transformation.</li>
+          <li>State the operational consequence.</li>
+        </ol>
+      </div>
+    </div>
+    <p class="source">Paper Fig. X and Sec. Y</p>
+  </section>
+
+  <!-- Delete this slide when mathematics does not advance the talk. -->
+  <section class="slide" data-section="Method">
+    <h2>The central equation must expose the mechanism</h2>
+    <div class="equation" id="eq:main">
+      \widehat y_t=f_\theta(x_{1:t},c),
+      \qquad
+      \theta^\star=\arg\min_\theta \mathcal L(\widehat y_t,y_t).
+    </div>
+    <table class="notation compact full footnotesize">
+      <thead><tr><th class="l" style="width:15%">Symbol</th><th class="l" style="width:22%">Type / status</th><th class="l">Paper-specific meaning and role</th></tr></thead>
+      <tbody>
+        <tr><td>$t,\ 1{:}t$</td><td class="l">index / range</td><td class="l">Current step and inclusive input-history range.</td></tr>
+        <tr><td>$x_{1:t},\ c$</td><td class="l">input / condition</td><td class="l">Observed sequence and condition; give exact types and shapes.</td></tr>
+        <tr><td>$f_\theta$</td><td class="l">learned function</td><td class="l">Maps inputs to the prediction under parameters $\theta$.</td></tr>
+        <tr><td>$\widehat y_t,\ y_t$</td><td class="l">prediction / target</td><td class="l">Model output and target; the hat marks an estimate.</td></tr>
+        <tr><td>$\mathcal L,\ \theta^\star$</td><td class="l">scalar / optimum</td><td class="l">Training objective and its minimizing parameters; explain every term.</td></tr>
+      </tbody>
+    </table>
+    <div class="block alert footnotesize mt-1" data-title="Operational meaning">
+      Replace this scaffold with what the paper computes, what is optimized or fixed, and how the output of
+      Eq.&nbsp;\eqref{eq:main} drives the next method stage.
+    </div>
+    <p class="source">Paper Eq. X and Sec. Y</p>
+  </section>
+
+  <!-- ─────────────────────────── Evidence ─────────────────────────── -->
+  <section class="slide" data-section="Evidence">
+    <h2>The evaluation must test the stated thesis</h2>
+    <div class="columns small">
+      <div class="column" style="--w:43%">
+        <div class="block" data-title="Protocol">Dataset, split, sample count, preprocessing, hardware, and comparison conditions.</div>
+      </div>
+      <div class="column">
+        <div class="block" data-title="Metric meaning">Translate every reported metric into the question it answers.</div>
+        <div class="block alert" data-title="Caveat">State conditional averaging, exclusions, or a comparability limitation.</div>
+      </div>
+    </div>
+    <p class="source">Paper Sec. X and Table Y</p>
+  </section>
+
+  <section class="slide" data-section="Evidence">
+    <h2>The decisive result, including its important exception</h2>
+    <div class="block" data-title="Supported result">Report the exact value, denominator, metric direction, and test condition.</div>
+    <div class="block alert" data-title="What it does not establish">State the strongest relevant exception or evidentiary boundary.</div>
+    <p class="source">Paper Table X, Fig. Y, and Sec. Z</p>
+  </section>
+
+  <!-- ─────────────────────────── Assessment ─────────────────────────── -->
+  <section class="slide" data-section="Assessment">
+    <h2>What remains brittle</h2>
+    <div class="columns small">
+      <div class="column">
+        <div class="block" data-title="Method limits">Assumptions, scope, and failure modes.</div>
+      </div>
+      <div class="column">
+        <div class="block" data-title="Evidence and reproducibility limits">Dataset selection, missing uncertainty, unavailable code/data, or undisclosed settings.</div>
+      </div>
+    </div>
+    <p class="source">Paper limitations and presenter assessment</p>
+  </section>
+
+  <section class="slide" data-section="Assessment">
+    <h2>Three takeaways for the audience</h2>
+    <ol>
+      <li>One transferable representation or modeling lesson.</li>
+      <li>One evidence or evaluation lesson.</li>
+      <li>One open problem or deployment lesson.</li>
+    </ol>
+    <div class="block alert" data-title="Discussion">End with one question that follows from a documented limitation.</div>
+    <p class="source">Presenter synthesis based on the paper</p>
+  </section>
+
+  <!-- Remove this slide if nothing is cited. -->
+  <section class="slide references">
+    <h2>References</h2>
+  </section>
+
+  <section class="slide closing-slide" data-logos="mbzuai"></section>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MBZUAI HTML Slides — Demo</title>
+
+<!-- KaTeX (math) + MBZUAI theme -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="mbzuai-slides.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="mbzuai-slides.js"></script>
+
+<!-- Optional: KaTeX macros shared by the whole deck -->
+<script type="application/json" id="katex-macros">
+{
+  "\\R": "\\mathbb{R}",
+  "\\E": "\\mathbb{E}",
+  "\\vx": "\\boldsymbol{x}",
+  "\\vy": "\\boldsymbol{y}",
+  "\\KL": "D_{\\mathrm{KL}}",
+  "\\softmax": "\\operatorname{softmax}"
+}
+</script>
+
+<!-- Bibliography: paste BibTeX entries verbatim -->
+<script type="text/x-bibtex" id="bibliography">
+@inproceedings{vaswani2017attention,
+  title     = {Attention Is All You Need},
+  author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, {\L}ukasz and Polosukhin, Illia},
+  booktitle = {Advances in Neural Information Processing Systems},
+  shortbooktitle = {NeurIPS},
+  pages     = {5998--6008},
+  year      = {2017}
+}
+@inproceedings{he2016deep,
+  title     = {Deep Residual Learning for Image Recognition},
+  author    = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  shortbooktitle = {CVPR},
+  pages     = {770--778},
+  year      = {2016}
+}
+@article{kingma2014adam,
+  title   = {Adam: A Method for Stochastic Optimization},
+  author  = {Kingma, Diederik P. and Ba, Jimmy},
+  journal = {arXiv preprint arXiv:1412.6980},
+  year    = {2014}
+}
+@article{lecun2015deep,
+  title   = {Deep Learning},
+  author  = {LeCun, Yann and Bengio, Yoshua and Hinton, Geoffrey},
+  journal = {Nature},
+  volume  = {521},
+  number  = {7553},
+  pages   = {436--444},
+  year    = {2015}
+}
+@inproceedings{ho2020denoising,
+  title     = {Denoising Diffusion Probabilistic Models},
+  author    = {Ho, Jonathan and Jain, Ajay and Abbeel, Pieter},
+  booktitle = {Advances in Neural Information Processing Systems},
+  shortbooktitle = {NeurIPS},
+  volume    = {33},
+  pages     = {6840--6851},
+  year      = {2020}
+}
+</script>
+</head>
+<body>
+
+<main class="deck"
+      data-short-title="Your Presentation Title"
+      data-foot-mid="Subtitle Here"
+      data-cite-style="numeric"
+      data-slide-refs="true">
+
+  <!-- ───────────────────────────── Title ───────────────────────────── -->
+  <section class="slide title-slide" data-logos="mbzuai rcl">
+    <h1>Your Presentation Title</h1>
+    <p class="subtitle">Subtitle Here</p>
+    <p class="author">Author Name<sup>1</sup> &nbsp; Second Author<sup>1,2</sup></p>
+    <p class="email">author@mbzuai.ac.ae</p>
+    <p class="institute"><sup>1</sup>Mohamed bin Zayed University of Artificial Intelligence &nbsp; <sup>2</sup>Robotics Cognition Lab</p>
+    <p class="date">November 16, 2026</p>
+  </section>
+
+  <!-- ───────────────────────────── Outline ─────────────────────────── -->
+  <section class="slide">
+    <h2>Outline</h2>
+    <div class="toc"></div>
+  </section>
+
+  <!-- ───────────────────────────── Introduction ────────────────────── -->
+  <section class="slide" data-section="Introduction">
+    <h2>Introduction</h2>
+    <ul>
+      <li>First point with MBZUAI branding</li>
+      <li>Second point, citing a classic survey <cite>lecun2015deep</cite></li>
+      <li>Third point with a nested list
+        <ul>
+          <li>Residual connections <cite>he2016deep</cite></li>
+          <li>Self-attention <cite>vaswani2017attention</cite></li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <section class="slide" data-section="Introduction">
+    <h2>Content with Blocks</h2>
+    <div class="block" data-title="Standard Block">This is a standard block with MBZUAI branding.</div>
+    <div class="block alert" data-title="Important Note">Highlighted information goes here.</div>
+    <div class="block example" data-title="Example">Example content with MBZUAI styling.</div>
+  </section>
+
+  <!-- ───────────────────────────── Method ──────────────────────────── -->
+  <section class="slide section-slide" data-section="Method">
+    <p>Mathematical formulation, theory, and the model architecture.</p>
+  </section>
+
+  <section class="slide" data-section="Method">
+    <h2>Numbered Equations and Cross-References</h2>
+    <p>Scaled dot-product attention <cite>vaswani2017attention</cite> maps queries
+       $Q\in\R^{n\times d_k}$, keys $K$ and values $V$ to</p>
+    <div class="equation" id="eq:attn">
+      \operatorname{Attn}(Q,K,V)=\softmax\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V .
+    </div>
+    <p>Training minimises the expected negative log-likelihood</p>
+    \begin{equation}
+      \mathcal{L}(\theta) = -\E_{(\vx,\vy)\sim\mathcal{D}}\big[\log p_\theta(\vy\mid\vx)\big]
+      + \lambda\,\lVert\theta\rVert_2^2 . \label{eq:loss}
+    \end{equation}
+    <p class="small">Eq.&nbsp;\eqref{eq:attn} is used inside every layer, and the objective in
+       <a class="ref" href="#eq:loss"></a> is optimised with Adam\cite{kingma2014adam}.<span class="footnote">We use
+       $\beta_1=0.9$, $\beta_2=0.98$ and $\epsilon=10^{-9}$.</span></p>
+  </section>
+
+  <section class="slide" data-section="Method">
+    <h2>Multi-line Derivations</h2>
+    <p>An <code>align</code> environment receives a single equation number:</p>
+    \begin{align}
+      \KL\!\left(q\,\|\,p\right)
+        &= \E_{q}\!\left[\log q(z) - \log p(z)\right] \\
+        &= -\mathcal{H}(q) - \E_{q}[\log p(z)] \;\ge\; 0 . \label{eq:kl}
+    \end{align}
+    <p>Unnumbered display math uses <code>$$…$$</code> or <code>\[…\]</code>:</p>
+    $$\epsilon_\theta(\vx_t, t) \approx \epsilon,\qquad \vx_t=\sqrt{\bar\alpha_t}\,\vx_0+\sqrt{1-\bar\alpha_t}\,\epsilon .$$
+    <p class="source">Parameterisation follows \citet{ho2020denoising}, Eq. 4.</p>
+  </section>
+
+  <section class="slide" data-section="Method">
+    <h2>Theorem, Definition and Proof</h2>
+    <div class="definition" data-name="Lipschitz continuity">
+      <p>$f:\R^d\to\R$ is $L$-Lipschitz if $|f(\vx)-f(\vy)|\le L\lVert\vx-\vy\rVert$ for all $\vx,\vy\in\R^d$.</p>
+    </div>
+    <div class="theorem boxed" id="thm:gd" data-name="Descent lemma">
+      <p>If $\nabla f$ is $L$-Lipschitz and $\eta\le 1/L$, gradient descent satisfies
+        $f(\vx_{k+1})\le f(\vx_k)-\tfrac{\eta}{2}\lVert\nabla f(\vx_k)\rVert^2$.</p>
+    </div>
+    <div class="proof small">
+      <p>Apply the quadratic upper bound $f(\vy)\le f(\vx)+\langle\nabla f(\vx),\vy-\vx\rangle+\tfrac{L}{2}\lVert\vy-\vx\rVert^2$
+         with $\vy=\vx-\eta\nabla f(\vx)$ and rearrange.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-section="Method">
+    <h2>Two Column Layout with a Figure</h2>
+    <div class="columns c">
+      <div class="column" style="--w:46%">
+        <figure id="fig:pipeline">
+          <svg viewBox="0 0 520 200" width="520" role="img" aria-label="Pipeline diagram">
+            <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#E5C687"/></marker></defs>
+            <rect x="10" y="70" width="140" height="60" rx="4" fill="#0C2945"/>
+            <text x="80" y="107" fill="#fff" font-size="22" text-anchor="middle" font-family="Source Sans 3, sans-serif">Encoder</text>
+            <rect x="190" y="70" width="140" height="60" rx="4" fill="#154677"/>
+            <text x="260" y="107" fill="#fff" font-size="22" text-anchor="middle" font-family="Source Sans 3, sans-serif">Latent z</text>
+            <rect x="370" y="70" width="140" height="60" rx="4" fill="#0C2945"/>
+            <text x="440" y="107" fill="#fff" font-size="22" text-anchor="middle" font-family="Source Sans 3, sans-serif">Decoder</text>
+            <line x1="150" y1="100" x2="186" y2="100" stroke="#E5C687" stroke-width="3" marker-end="url(#arr)"/>
+            <line x1="330" y1="100" x2="366" y2="100" stroke="#E5C687" stroke-width="3" marker-end="url(#arr)"/>
+          </svg>
+          <figcaption>Encoder–decoder pipeline. The latent $z$ is regularised by Eq.&nbsp;\eqref{eq:kl}.</figcaption>
+        </figure>
+      </div>
+      <div class="column">
+        <h4>Left: the model</h4>
+        <p class="small"><a class="ref" href="#fig:pipeline"></a> shows the architecture; residual blocks follow <cite class="t">he2016deep</cite>.</p>
+        <h4>Right: the guarantee</h4>
+        <p class="small">Under the assumptions of <a class="ref" href="#thm:gd"></a>, the loss decreases monotonically.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────────── Results ─────────────────────────── -->
+  <section class="slide" data-section="Results">
+    <h2>Academic Table (booktabs)</h2>
+    <figure class="table" id="tab:main">
+      <figcaption>Top-1 accuracy (%) on ImageNet. Best in <b>bold</b>, second <u>underlined</u>; mean ± std over 3 seeds.</figcaption>
+      <table>
+        <thead><tr><th class="l">Method</th><th>Params</th><th>Top-1 ↑</th><th>FLOPs ↓</th></tr></thead>
+        <tbody>
+          <tr><td class="l">ResNet-50 <cite>he2016deep</cite></td><td class="num">25.6M</td><td class="num">76.1 ± 0.1</td><td class="num">4.1G</td></tr>
+          <tr><td class="l">ViT-B/16</td><td class="num">86.6M</td><td class="num second">77.9 ± 0.2</td><td class="num">17.6G</td></tr>
+          <tr class="ours"><td class="l">Ours</td><td class="num">31.2M</td><td class="num best">79.4 ± 0.1</td><td class="num">4.6G</td></tr>
+        </tbody>
+      </table>
+    </figure>
+    <p class="small center">As <a class="ref" href="#tab:main"></a> shows, our model is the most accurate at a ResNet-like cost.</p>
+  </section>
+
+  <section class="slide" data-section="Results">
+    <h2>Brand Table and Incremental Reveal</h2>
+    <div class="columns c">
+      <div class="column">
+        <table class="brand">
+          <thead><tr><th>Item</th><th>Value</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Item 1</td><td class="c">100</td><td class="c">Pass</td></tr>
+            <tr><td>Item 2</td><td class="c">200</td><td class="c">Pass</td></tr>
+            <tr><td>Item 3</td><td class="c">150</td><td class="c">Fail</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="column">
+        <ul>
+          <li class="fragment">Revealed on the first key press</li>
+          <li class="fragment">Then this one</li>
+          <li class="fragment">Finally the takeaway</li>
+        </ul>
+        <p class="takeaway fragment">Fragments are shown all at once in print/PDF.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────────── Conclusion ──────────────────────── -->
+  <section class="slide" data-section="Conclusion">
+    <h2>Summary</h2>
+    <ol>
+      <li><span class="strong">Key Point 1</span>: attention, Eq.&nbsp;\eqref{eq:attn}</li>
+      <li><span class="strong">Key Point 2</span>: descent guarantee, \cref{thm:gd}</li>
+      <li><span class="strong">Key Point 3</span>: results in \cref{tab:main}</li>
+    </ol>
+  </section>
+
+  <section class="slide references">
+    <h2>References</h2>
+  </section>
+
+  <section class="slide closing-slide" data-logos="mbzuai rcl"></section>
+
+</main>
+</body>
+</html>
