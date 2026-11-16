@@ -167,14 +167,25 @@ cp -r beamerthemeMBZUAI/ ~/Library/texmf/tex/latex/beamer/
 
 - explicit paper-author and presenter attribution;
 - configurable left, center, and right footer fields;
-- question/thesis, method, evaluation, evidence, and assessment frame patterns;
-- a formula frame with a visible notation table and operational-meaning block;
+- visual-first question, pipeline, method-stage, evaluation, full-table result, and assessment frame patterns;
+- a `\focuscrop` macro that dims an overview figure except for one stage, so the full architecture can be shown once and then revisited stage by stage;
 - compact frame-level source locators;
 - the standard MBZUAI title and closing frames.
 
-`templates/paper-presentation.html.in` is the same template for the HTML theme. It uses the same placeholders and expects the `html/` directory to be copied to `theme/` next to the deck.
+`templates/paper-presentation.html.in` is the HTML counterpart, with the same frame patterns, an SVG focus-crop overlay, and a starter notation-hover glossary. Hover is a Q&A aid; the template still defines every symbol on the slide where it first appears. It uses the same placeholders and expects the `html/` directory to be copied to `theme/` next to the deck.
 
 The `.tex.in` file uses `@@NAME@@` placeholders for the companion initializer. New projects fetch the template and theme from this repository, record the resolved Git commit, and keep a local copy so the generated deck remains reproducible. Existing projects can refresh the theme files without overwriting their paper-specific `main.tex`.
+
+## Header Logos and Long Titles
+
+The frame header shows a secondary logo (RCL by default) beside the MBZUAI mark. Change or remove it in the preamble:
+
+```latex
+\headerlogo{assets/my-group-logo.pdf}  % replace
+\headerlogo{}                          % remove; gives the frame title more room
+```
+
+A frame title wider than the space left of the logos is scaled down to fit and the log reports `Frame title too wide ... on page N`. Shorten such titles rather than relying on the scaling.
 
 ## Available Colors
 

@@ -15,7 +15,28 @@
 \newcommand{\footmid}[1]{\renewcommand{\mbzuai@footmid}{#1}}
 \newcommand{\footright}[1]{\renewcommand{\mbzuai@footright}{#1}}
 
+% ── Header logos ─────────────────────────────────────────────────────────────
+% \headerlogo{<file>} sets the secondary logo left of the MBZUAI mark;
+% \headerlogo{} removes it and gives the frame title more room.
+\newcommand{\mbzuai@headerlogo}{rcl-logo-sand.pdf}
+\newcommand{\headerlogo}[1]{\renewcommand{\mbzuai@headerlogo}{#1}}
+\newcommand{\mbzuai@headerlogos}{%
+    \ifx\mbzuai@headerlogo\empty\else
+        \raisebox{0.25em}{\includegraphics[height=1.4em]{\mbzuai@headerlogo}}%
+        \hspace{0.6em}%
+        \raisebox{0.3em}{\textcolor{mbzuai-sand}{\rule{0.4pt}{1.2em}}}%
+        \hspace{0.6em}%
+    \fi
+    \raisebox{0.2em}{\includegraphics[height=1.5em]{logo_sand.pdf}}%
+}
+\newsavebox{\mbzuai@logobox}
+\newsavebox{\mbzuai@titlebox}
+\newlength{\mbzuai@titleroom}
+
 % ── Frametitle with composite banner background ────────────────────────────
+% A title wider than the space left of the logos is scaled down to fit (it
+% would otherwise wrap above the banner and disappear) and a warning
+% "Frame title too wide" is written to the log.
 \setbeamertemplate{frametitle}{%
     \nointerlineskip
     % Outer box: full banner height, no depth (banner extends to bottom)
@@ -28,15 +49,21 @@
                     {\includegraphics[width=\paperwidth]{banner-bg.pdf}};
             }%
         \hss}%
+        \sbox{\mbzuai@logobox}{\mbzuai@headerlogos}%
+        \sbox{\mbzuai@titlebox}{\usebeamerfont{frametitle}\insertframetitle}%
+        \setlength{\mbzuai@titleroom}{\dimexpr\paperwidth-4em-\wd\mbzuai@logobox\relax}%
+        \ifdim\wd\mbzuai@titlebox>\mbzuai@titleroom
+            \PackageWarningNoLine{beamerouterthemeMBZUAI}{Frame title too wide by
+                \the\dimexpr\wd\mbzuai@titlebox-\mbzuai@titleroom\relax;
+                scaled to fit on page \insertpagenumber.
+                Shorten the title}%
+            \sbox{\mbzuai@titlebox}{\resizebox{\mbzuai@titleroom}{!}{\usebox{\mbzuai@titlebox}}}%
+        \fi
         % Title text with bottom spacing via raisebox
-        \raisebox{0.4em}{\usebeamerfont{frametitle}\insertframetitle}%
+        \raisebox{0.4em}{\usebox{\mbzuai@titlebox}}%
         \hfill
-        % Logos on the right (RCL | MBZUAI)
-        \raisebox{0.25em}{\includegraphics[height=1.4em]{rcl-logo-sand.pdf}}%
-        \hspace{0.6em}%
-        \raisebox{0.3em}{\textcolor{mbzuai-sand}{\rule{0.4pt}{1.2em}}}%
-        \hspace{0.6em}%
-        \raisebox{0.2em}{\includegraphics[height=1.5em]{logo_sand.pdf}}%
+        % Logos on the right (secondary | MBZUAI)
+        \usebox{\mbzuai@logobox}%
         \hspace{1.5em}%
     \end{beamercolorbox}%
     \nointerlineskip
@@ -45,29 +72,29 @@
 }
 
 % ── Footer with banner background and customizable content ────────────────────
+% Built from explicit \paperwidth boxes so it never reports an overfull box;
+% genuine content overflows in the log are then easy to spot.
 \setbeamertemplate{footline}{%
-    \leavevmode%
-    % Content with correct height for beamer's textheight calculation
-    \begin{beamercolorbox}[wd=\paperwidth, ht=1.6em, dp=0em, leftskip=3em, rightskip=6em,vmode]{footline}%
-        % Banner background overlay (positioned at bottom of page)
+    \hbox to \paperwidth{%
+        % Banner background overlay (positioned at bottom of page, zero size)
         \tikz[remember picture, overlay]{%
             \node[anchor=south west, inner sep=0, outer sep=0]
                 at (current page.south west)
                 {\includegraphics[width=\paperwidth, height=1.6em]{banner-bg.pdf}};
         }%
-        % Vertically center text
-        \vbox to 1.6em{%
-            \vfil
+        \hskip 3em
+        % Left and middle fields share the space up to the page number.
+        \vbox to 1.6em{\vfil\hbox{%
             {\scriptsize \textcolor{white}{\mbzuai@footleft}}%
             \hspace{1.2em}%
             {\scriptsize \textcolor{mbzuai-sand}{|}}%
             \hspace{1.2em}%
             {\scriptsize \textcolor{white}{\mbzuai@footmid}}%
-            \hfill
-            {\scriptsize \textcolor{white}{\mbzuai@footright}}%
-            \vfil
-        }%
-    \end{beamercolorbox}%
+        }\vfil}%
+        \hfill
+        \vbox to 1.6em{\vfil\hbox{{\scriptsize \textcolor{white}{\mbzuai@footright}}}\vfil}%
+        \hskip 6em
+    }%
 }
 
 \mode<all>

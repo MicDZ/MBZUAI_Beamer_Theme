@@ -22,6 +22,25 @@
 }
 </script>
 
+<!--
+  Notation hover glossary: hovering a symbol in any formula shows its meaning.
+  This is only an aid for Q&A and rehearsal. It never replaces on-slide
+  definitions: define every symbol explicitly on the slide where it first
+  appears. Tooltips do not appear in the PDF.
+-->
+<script type="application/json" id="notation">
+{
+  "x_{1:t}":     {"type": "input", "meaning": "Observed sequence up to step $t$."},
+  "c":           {"type": "condition", "meaning": "Conditioning signal."},
+  "f_\\theta":   {"type": "learned function", "meaning": "Network with weights $\\theta$."},
+  "\\widehat y_t": {"type": "prediction", "meaning": "Predicted output at step $t$."},
+  "y_t":         {"type": "target", "meaning": "Ground-truth output at step $t$."},
+  "\\theta":     {"type": "parameters", "meaning": "All learnable weights."},
+  "\\theta^\\star": {"type": "parameters", "meaning": "Weights that minimize $\\mathcal L$."},
+  "\\mathcal L": {"type": "scalar", "meaning": "Training loss."}
+}
+</script>
+
 <!-- Paste the paper's BibTeX here (only cited keys appear in References). -->
 <script type="text/x-bibtex" id="bibliography">
 </script>
@@ -45,127 +64,150 @@
     <p class="date">@@DATE@@</p>
   </section>
 
-  <!-- Build an argument, not a copy of the paper's section order. -->
+  <!--
+    Build an argument, not a copy of the paper's section order.
+    One visual anchor per slide; text only supports it. Do not repeat what the
+    figure, the title, or another slide already says. No "see Slide N" references.
+  -->
 
-  <!-- ─────────────────────────── Question and Thesis ─────────────────────────── -->
-  <section class="slide" data-section="Question and Thesis">
-    <h2>The paper's central question in one sentence</h2>
-    <div class="columns">
-      <div class="column" style="--w:31%">
-        <h4>Input</h4>
-        <p class="small">State what the method receives.</p>
-      </div>
-      <div class="column" style="--w:34%">
-        <h4>Output</h4>
-        <p class="small">State what it must produce or predict.</p>
-      </div>
-      <div class="column" style="--w:31%">
-        <h4>Why it is hard</h4>
-        <p class="small">Name the uncertainty, bottleneck, or tradeoff.</p>
-      </div>
-    </div>
-    <p class="source">Paper Sec. 1</p>
-  </section>
-
-  <section class="slide" data-section="Question and Thesis">
-    <h2>The thesis should answer the question</h2>
-    <div class="block" data-title="Paper's thesis">Replace this with one precise, source-backed claim.</div>
-    <div class="block alert" data-title="Presenter roadmap">Name the minimum method mechanism and decisive evidence needed to evaluate it.</div>
-    <p class="source">Paper Secs. 1 and 3</p>
+  <!-- ─────────────────────────── Question ─────────────────────────── -->
+  <section class="slide" data-section="Question">
+    <h2>The question in one sentence</h2>
+    <figure class="nonumber">
+      <!-- <img src="figures/teaser.png" style="max-height:400px" alt="Teaser"> -->
+      <div class="placeholder" style="height:380px">Teaser figure: input and output at a glance.</div>
+    </figure>
+    <p class="small"><span class="strong">Input</span> what the method receives. &nbsp;
+      <span class="strong">Output</span> what it produces. &nbsp;
+      <span class="strong">Hard because</span> the uncertainty or tradeoff.</p>
+    <p class="source">Paper Fig. 1</p>
   </section>
 
   <!-- ─────────────────────────── Method ─────────────────────────── -->
+  <!-- Show the full architecture once, then one focus crop per stage. -->
   <section class="slide" data-section="Method">
-    <h2>The method title should state what changes and why</h2>
-    <div class="columns c">
-      <div class="column" style="--w:58%">
-        <figure id="fig:overview">
-          <!-- <img src="figures/overview.png" style="max-height:360px" alt="Method overview"> -->
-          <div class="placeholder" style="height:300px">Place one legible original or adapted figure here.</div>
-          <figcaption>Method overview (adapted from the paper, Fig. X).</figcaption>
-        </figure>
-      </div>
-      <div class="column small">
-        <ol>
-          <li>Name the representation or state.</li>
-          <li>Explain the transformation.</li>
-          <li>State the operational consequence.</li>
-        </ol>
-      </div>
-    </div>
-    <p class="source">Paper Fig. X and Sec. Y</p>
+    <h2>The pipeline in one picture</h2>
+    <figure class="nonumber">
+      <!-- <img src="figures/overview.png" style="max-height:440px" alt="Method overview"> -->
+      <div class="placeholder" style="height:420px">Full architecture figure, legible size.</div>
+    </figure>
+    <p class="small center">Follow the data: what goes in, what each stage hands on, what comes out.</p>
+    <p class="source">Paper Fig. 2</p>
   </section>
 
-  <!-- Delete this slide when mathematics does not advance the talk. -->
+  <!--
+    Module slide: what problem it solves, how it works in general, what it uses.
+    Focus crop: the SVG dims everything except the window(s). Coordinates are
+    fractions of the image from the TOP-left; add one "M x y H x2 V y2 H x Z"
+    per window. Keep the stage's input and output inside the window.
+  -->
   <section class="slide" data-section="Method">
-    <h2>The central equation must expose the mechanism</h2>
+    <h2>Stage 1 turns raw input into features</h2>
+    <div class="columns c">
+      <div class="column" style="--w:58%">
+        <div style="position:relative">
+          <!-- <img src="figures/overview.png" style="width:100%;display:block" alt="Stage 1 of the method overview"> -->
+          <div class="placeholder" style="height:320px">Overview figure (same file as the pipeline slide).</div>
+          <svg viewBox="0 0 1 1" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">
+            <path fill="#fff" fill-opacity=".62" fill-rule="evenodd" d="M0 0H1V1H0Z M.02 .05H.36V.95H.02Z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="column small">
+        <p><span class="strong">Problem</span><br>The gap this stage closes.</p>
+        <p><span class="strong">How</span><br>The idea in one or two sentences.</p>
+        <p><span class="strong">Uses</span><br>Inputs, outputs, and key components.</p>
+      </div>
+    </div>
+    <p class="source">Adapted from Paper Fig. 2; Sec. 3.1</p>
+  </section>
+
+  <!--
+    Equation slide. Every symbol must be defined ON THE SLIDE where it first
+    appears (here: the "where" list). Later slides need not repeat it. Also add
+    each symbol to the #notation glossary in <head>; hover is a Q&A aid only.
+    Keep the complete audit (types, shapes, indices) in SOURCES.md.
+    Delete this slide when the equation does not advance the explanation.
+  -->
+  <section class="slide" data-section="Method">
+    <h2>Training fits the predictor to targets</h2>
     <div class="equation" id="eq:main">
       \widehat y_t=f_\theta(x_{1:t},c),
       \qquad
-      \theta^\star=\arg\min_\theta \mathcal L(\widehat y_t,y_t).
+      \theta^\star=\arg\min_\theta \mathcal L(\widehat y_t,y_t)
     </div>
-    <table class="notation compact full footnotesize">
-      <thead><tr><th class="l" style="width:15%">Symbol</th><th class="l" style="width:22%">Type / status</th><th class="l">Paper-specific meaning and role</th></tr></thead>
-      <tbody>
-        <tr><td>$t,\ 1{:}t$</td><td class="l">index / range</td><td class="l">Current step and inclusive input-history range.</td></tr>
-        <tr><td>$x_{1:t},\ c$</td><td class="l">input / condition</td><td class="l">Observed sequence and condition; give exact types and shapes.</td></tr>
-        <tr><td>$f_\theta$</td><td class="l">learned function</td><td class="l">Maps inputs to the prediction under parameters $\theta$.</td></tr>
-        <tr><td>$\widehat y_t,\ y_t$</td><td class="l">prediction / target</td><td class="l">Model output and target; the hat marks an estimate.</td></tr>
-        <tr><td>$\mathcal L,\ \theta^\star$</td><td class="l">scalar / optimum</td><td class="l">Training objective and its minimizing parameters; explain every term.</td></tr>
-      </tbody>
-    </table>
-    <div class="block alert footnotesize mt-1" data-title="Operational meaning">
-      Replace this scaffold with what the paper computes, what is optimized or fixed, and how the output of
-      Eq.&nbsp;\eqref{eq:main} drives the next method stage.
-    </div>
+    <p class="small mb-0">where</p>
+    <ul class="plain small mt-0">
+      <li>$x_{1:t}$: observed inputs up to step $t$; $c$: conditioning signal;</li>
+      <li>$f_\theta$: the network with weights $\theta$; $\widehat y_t$: its prediction, $y_t$: the target;</li>
+      <li>$\mathcal L$: training loss; $\theta^\star$: the weights that minimize it.</li>
+    </ul>
+    <p class="takeaway">What minimizing $\mathcal L$ achieves, in one sentence.</p>
     <p class="source">Paper Eq. X and Sec. Y</p>
   </section>
 
   <!-- ─────────────────────────── Evidence ─────────────────────────── -->
   <section class="slide" data-section="Evidence">
-    <h2>The evaluation must test the stated thesis</h2>
+    <h2>The evaluation tests the thesis</h2>
     <div class="columns small">
-      <div class="column" style="--w:43%">
-        <div class="block" data-title="Protocol">Dataset, split, sample count, preprocessing, hardware, and comparison conditions.</div>
+      <div class="column">
+        <h4>Protocol</h4>
+        <p>Datasets, splits, sample counts, and comparison conditions.</p>
       </div>
       <div class="column">
-        <div class="block" data-title="Metric meaning">Translate every reported metric into the question it answers.</div>
-        <div class="block alert" data-title="Caveat">State conditional averaging, exclusions, or a comparability limitation.</div>
+        <h4>Metrics</h4>
+        <p>What each metric answers, with its direction (↓/↑).</p>
       </div>
     </div>
-    <p class="source">Paper Sec. X and Table Y</p>
+    <p class="source">Paper Sec. 4.1</p>
   </section>
 
+  <!--
+    Reproduce the paper's table completely: all rows and baselines, no synthetic
+    rows, the paper's bold/underline meaning. Split a large table or use a
+    smaller font instead of selecting rows. Add a caveat only if it changes how
+    a number on this slide is read. The title must be supported by this table.
+  -->
   <section class="slide" data-section="Evidence">
-    <h2>The decisive result, including its important exception</h2>
-    <div class="block" data-title="Supported result">Report the exact value, denominator, metric direction, and test condition.</div>
-    <div class="block alert" data-title="What it does not establish">State the strongest relevant exception or evidentiary boundary.</div>
-    <p class="source">Paper Table X, Fig. Y, and Sec. Z</p>
+    <h2>A claim this table visibly supports</h2>
+    <figure class="table nonumber">
+      <table class="footnotesize">
+        <thead><tr><th class="l">Method</th><th>Metric A ↓</th><th>Metric B ↑</th></tr></thead>
+        <tbody>
+          <tr><td class="l">Baseline 1</td><td class="num">0.00</td><td class="num">0.00</td></tr>
+          <tr><td class="l">Baseline 2</td><td class="num second">0.00</td><td class="num second">0.00</td></tr>
+          <tr><td class="l">Ours</td><td class="num best">0.00</td><td class="num best">0.00</td></tr>
+        </tbody>
+      </table>
+    </figure>
+    <p class="scriptsize muted center">Bold: best; underline: second best (as in the paper).</p>
+    <p class="source">Paper Table 1</p>
   </section>
 
   <!-- ─────────────────────────── Assessment ─────────────────────────── -->
   <section class="slide" data-section="Assessment">
-    <h2>What remains brittle</h2>
+    <h2>What remains open</h2>
     <div class="columns small">
       <div class="column">
-        <div class="block" data-title="Method limits">Assumptions, scope, and failure modes.</div>
+        <h4>Method limits</h4>
+        <p>Assumptions, scope, and failure modes.</p>
       </div>
       <div class="column">
-        <div class="block" data-title="Evidence and reproducibility limits">Dataset selection, missing uncertainty, unavailable code/data, or undisclosed settings.</div>
+        <h4>Evidence limits</h4>
+        <p>Gaps that change how the results should be read.</p>
       </div>
     </div>
-    <p class="source">Paper limitations and presenter assessment</p>
+    <p class="source">Paper Sec. 6 and presenter assessment</p>
   </section>
 
   <section class="slide" data-section="Assessment">
-    <h2>Three takeaways for the audience</h2>
+    <h2>Takeaways</h2>
     <ol>
-      <li>One transferable representation or modeling lesson.</li>
-      <li>One evidence or evaluation lesson.</li>
-      <li>One open problem or deployment lesson.</li>
+      <li>One transferable lesson.</li>
+      <li>One open problem.</li>
     </ol>
-    <div class="block alert" data-title="Discussion">End with one question that follows from a documented limitation.</div>
-    <p class="source">Presenter synthesis based on the paper</p>
+    <div class="block alert" data-title="Discussion">One question that follows from a documented limitation.</div>
+    <p class="source">Presenter synthesis</p>
   </section>
 
   <!-- Remove this slide if nothing is cited. -->

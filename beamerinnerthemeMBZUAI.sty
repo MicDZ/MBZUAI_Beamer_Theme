@@ -41,7 +41,7 @@
             (current page.north west) rectangle +(\paperwidth, -28mm);
 
         % Title (auto-scale: max \Large, shrink if too long)
-        \node[anchor=north west, mbzuai-white]
+        \node[anchor=north west, mbzuai-white, inner sep=0] (mbzuai-title)
             at ([yshift=-8mm, xshift=15mm]current page.north west)
             {\settowidth{\mbzuaiTitleNat}{\Huge\bfseries\inserttitle}%
              \ifdim\mbzuaiTitleNat>\dimexpr\paperwidth-30mm\relax
@@ -50,22 +50,23 @@
                  \textcolor{mbzuai-white}{\Huge\bfseries\inserttitle}%
              \fi};
 
-        % Subtitle
-        \node[anchor=north west, mbzuai-sand, font=\large]
-            at ([yshift=-18mm, xshift=15mm]current page.north west)
+        % Subtitle: directly below the title, which may wrap to two lines
+        \node[anchor=north west, mbzuai-sand, font=\large, inner sep=0]
+            at ([yshift=-2.5mm]mbzuai-title.south west)
             {\insertsubtitle};
     \end{tikzpicture}
 
     \vspace{30mm}
-    % Adaptive layout: content fills available space
+    % Adaptive layout: content fills available space; the glue can shrink so
+    % long author lists do not overflow the page
     \begin{center}
         \vfill
-        {\normalsize \textcolor{mbzuai-text}{\insertauthor}}\\[3mm]
-        {\small \textcolor{mbzuai-subtle}{\insertinstitute}}\\[3mm]
+        {\normalsize \textcolor{mbzuai-text}{\insertauthor}}\\[3mm minus 2mm]
+        {\small \textcolor{mbzuai-subtle}{\insertinstitute}}\\[3mm minus 2mm]
         {\small \textcolor{mbzuai-subtle}{\insertdate}}
         \vfill
         \mbzuai@makelogos
-        \vskip 8mm
+        \vskip 8mm minus 8mm
     \end{center}
 }
 
