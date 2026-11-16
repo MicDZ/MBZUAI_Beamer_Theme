@@ -23,6 +23,32 @@
 }
 </script>
 
+<!-- Optional: notation glossary. Hovering a symbol in any formula shows its meaning. -->
+<script type="application/json" id="notation">
+{
+  "Q":                 {"type": "matrix", "meaning": "Queries, $Q\\in\\R^{n\\times d_k}$: one row per token asking “what am I looking for?”"},
+  "K":                 {"type": "matrix", "meaning": "Keys, $K\\in\\R^{n\\times d_k}$: what each token offers to be matched against."},
+  "V":                 {"type": "matrix", "meaning": "Values, $V\\in\\R^{n\\times d_v}$: the content that is mixed by the attention weights."},
+  "d_k":               {"type": "scalar", "meaning": "Key/query dimension; dividing by $\\sqrt{d_k}$ keeps logits at unit scale."},
+  "\\theta":           {"type": "parameters", "meaning": "All learnable weights of the model."},
+  "\\mathcal{L}":      {"type": "scalar", "meaning": "Training objective (regularised negative log-likelihood)."},
+  "\\lambda":          {"type": "hyper-parameter", "meaning": "Weight-decay strength."},
+  "\\mathcal{D}":      {"type": "distribution", "meaning": "Training data distribution over pairs $(\\vx,\\vy)$."},
+  "p_\\theta":         {"type": "model", "meaning": "Model’s conditional distribution over outputs given the input."},
+  "\\vx":              {"type": "input", "meaning": "Input sequence."},
+  "\\vy":              {"type": "target", "meaning": "Target sequence."},
+  "\\vx_0":            {"type": "data", "meaning": "Clean data sample."},
+  "\\vx_t":            {"type": "latent", "meaning": "Noisy sample at diffusion step $t$."},
+  "\\epsilon":         {"type": "noise", "meaning": "Standard Gaussian noise, $\\epsilon\\sim\\mathcal N(0,I)$."},
+  "\\epsilon_\\theta": {"type": "network", "meaning": "Noise-prediction network."},
+  "\\bar\\alpha_t":    {"type": "schedule", "meaning": "Cumulative signal-retention factor $\\prod_{s\\le t}(1-\\beta_s)$."},
+  "\\KL":              {"type": "divergence", "meaning": "Kullback–Leibler divergence."},
+  "\\mathcal{H}":      {"type": "functional", "meaning": "Shannon entropy."},
+  "\\eta":             {"type": "hyper-parameter", "meaning": "Step size (learning rate)."},
+  "L":                 {"type": "constant", "meaning": "Lipschitz constant of $\\nabla f$."}
+}
+</script>
+
 <!-- Bibliography: paste BibTeX entries verbatim -->
 <script type="text/x-bibtex" id="bibliography">
 @inproceedings{vaswani2017attention,
@@ -130,7 +156,7 @@
       \mathcal{L}(\theta) = -\E_{(\vx,\vy)\sim\mathcal{D}}\big[\log p_\theta(\vy\mid\vx)\big]
       + \lambda\,\lVert\theta\rVert_2^2 . \label{eq:loss}
     \end{equation}
-    <p class="small">Eq.&nbsp;\eqref{eq:attn} is used inside every layer, and the objective in
+    <p class="small"><span class="muted">Hover any symbol to see its meaning.</span> Eq.&nbsp;\eqref{eq:attn} is used inside every layer, and the objective in
        <a class="ref" href="#eq:loss"></a> is optimised with Adam\cite{kingma2014adam}.<span class="footnote">We use
        $\beta_1=0.9$, $\beta_2=0.98$ and $\epsilon=10^{-9}$.</span></p>
   </section>
@@ -141,7 +167,7 @@
     \begin{align}
       \KL\!\left(q\,\|\,p\right)
         &= \E_{q}\!\left[\log q(z) - \log p(z)\right] \\
-        &= -\mathcal{H}(q) - \E_{q}[\log p(z)] \;\ge\; 0 . \label{eq:kl}
+        &= -\mathcal{H}(q) - \E_{q}[\log \explain{p(z)}{Prior density of the latent $z$}] \;\ge\; 0 . \label{eq:kl}
     \end{align}
     <p>Unnumbered display math uses <code>$$…$$</code> or <code>\[…\]</code>:</p>
     $$\epsilon_\theta(\vx_t, t) \approx \epsilon,\qquad \vx_t=\sqrt{\bar\alpha_t}\,\vx_0+\sqrt{1-\bar\alpha_t}\,\epsilon .$$

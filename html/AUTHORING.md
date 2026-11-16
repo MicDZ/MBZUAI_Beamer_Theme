@@ -138,6 +138,44 @@ give the short venue name used in the per-slide reference lines.
 
 ---
 
+## 5a. Notation hover (symbol glossary)
+
+During the talk, hovering a symbol inside **any** formula shows a tooltip with its meaning, and every
+occurrence of that symbol on the slide is highlighted. Tapping works on touch screens. Press `g` to underline
+every symbol that has an entry, which is useful when rehearsing to check coverage. Glossary entries come from three sources:
+
+1. **Deck glossary** in `<head>`. The key is TeX, and the value is a meaning, or `{type, meaning}`. A meaning may contain `$math$` and HTML:
+   ```html
+   <script type="application/json" id="notation">
+   {
+     "\\theta":       "All learnable weights of the model.",
+     "x_t":           {"type": "input", "meaning": "Token embedding at step $t$, $x_t\\in\\R^d$."},
+     "\\mathcal{L}":  {"type": "scalar", "meaning": "Training loss."},
+     "\\bar\\alpha_t": "Cumulative noise schedule."
+   }
+   </script>
+   ```
+   Put `<script type="application/json" class="notation">{…}</script>` inside a slide to override meanings for that slide only.
+2. **Notation tables** are harvested automatically. In `<table class="notation">`, each row's first cell holds the symbol(s) (comma-separated math), its last
+   cell holds the meaning, and a middle cell, if there is one, holds the type. Use `<tr data-sym="\theta^\star">` to set the key explicitly, and
+   `<table class="notation" data-notation="local">` to limit a table to its own slide.
+3. **One-off explanations** inside a formula: `\explain{p(z)}{Prior density of the latent $z$}`. These render exactly as `p(z)`.
+
+Precedence, highest first: slide-local JSON, then the same slide's notation table, then the deck glossary, then notation tables on other slides.
+
+Matching rules:
+- Matching works on TeX tokens, so `y_{t}` = `y_t` and `\hat{y}` = `\hat y`. Longest keys win, so with `x`, `x_t` and `\hat x_t` all defined, each formula picks the most specific one.
+- A modifier changes identity: `\mathcal{L}`, `\hat y`, `\bar\alpha` and `\mathbf x` match only their own keys, never plain `L`, `y`, `\alpha` or `x`. Text inside `\text{}`, `\operatorname{}` and `\mathrm{}` is never matched by single letters. Write the key with the same macro the formulas use, for example `\vx` if formulas use `\vx`.
+- A matched symbol keeps its scripts attached (`K^\top`, `x_t'`), so typesetting is identical to the unannotated formula. Symbols inside those scripts are still matched.
+- If an annotated formula fails to render, it falls back to the plain formula. The QA report includes
+  `notation: {entries, annotatedSymbols, unusedDeckKeys, fallbackFormulas}`. Use `unusedDeckKeys` to catch keys spelled differently from the formulas.
+- Turn the feature off with `<main class="deck" data-notation-hover="false">`. Tooltips never appear in print or PDF.
+
+Agent tip: when a slide introduces notation, also add its symbols to the deck glossary, keeping the meanings to one short sentence.
+Add a `type` such as matrix, scalar, distribution or hyper-parameter, because it helps the audience most.
+
+---
+
 ## 6. Cross-references
 
 Labels come from `id` attributes (or `\label{}` inside an equation).
@@ -228,11 +266,11 @@ about 60 words per slide. When the QA report flags overflow, split the slide or 
 
 ## 11. Viewing, QA, export
 
-- **Keys:** → / Space / PgDn next, ← / PgUp previous, ↑ ↓ jump a whole slide, Home/End, `o` or Esc overview, `f` fullscreen, `d` toggles debug outlines.
+- **Keys:** → / Space / PgDn next, ← / PgUp previous, ↑ ↓ jump a whole slide, Home/End, `o` or Esc overview, `f` fullscreen, `g` marks the symbols that have notation entries, `d` toggles debug outlines.
 - **URLs:** `deck.html#/5` opens slide 5, `deck.html#fig:arch` opens the slide containing `#fig:arch`, `?print` lays out all slides for printing, and `?debug` outlines overflowing slides in red.
 - **QA report:** once rendered, the theme sets `<html data-mbz-ready="true">`, fires the `mbzuai:ready` event, sets `window.MBZUAI.report`,
   and adds `<script id="mbz-report" type="application/json">` containing:
-  `{ slides, sections, overflow:[{slide,title}], missingCitations, missingLabels, katexErrors:[{slide,tex,error}], warnings }`.
+  `{ slides, sections, overflow:[{slide,title}], missingCitations, missingLabels, katexErrors:[{slide,tex,error}], warnings, notation }`.
 - **Agent tools** (they need Chrome or Chromium; set `CHROME=` to override the path):
 
 ```bash

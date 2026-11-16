@@ -109,6 +109,7 @@
       bibMaxAuthors: parseInt(d.bibMaxAuthors || "8", 10),
       bibAll: d.bibAll === "true",
       equationNumbering: d.equationNumbering || "global", // "global" | "section"
+      notationHover: d.notationHover !== "false",
       macros: macros
     };
   }
@@ -582,6 +583,212 @@
   }
 
   // ======================================================================
+  //  Notation glossary: hover a symbol inside any formula to see its meaning
+  // ======================================================================
+  // Symbols are matched at the TeX level and wrapped in \htmlData{mbz-sym=ID}{…},
+  // so KaTeX emits <span data-mbz-sym="ID"> around exactly that symbol.
+
+  // Commands whose argument changes the identity of a symbol (\hat y ≠ y, \mathcal L ≠ L):
+  // their argument is never matched on its own, only as part of a longer key.
+  var TEX_MODIFIERS = {};
+  ("hat widehat bar overline underline tilde widetilde vec dot ddot dddot check breve acute grave mathring " +
+   "overrightarrow overleftarrow overleftrightarrow mathbf mathbb mathcal mathfrak mathscr mathsf mathtt mathit " +
+   "mathnormal boldsymbol bm pmb left right middle big Big bigg Bigg bigl bigr Bigl Bigr biggl biggr Biggl Biggr")
+    .split(" ").forEach(function (c) { TEX_MODIFIERS[c] = 1; });
+  // Commands with ordinary arguments, where an argument can hold a single symbol.
+  var TEX_ARGS = { frac: 2, dfrac: 2, tfrac: 2, cfrac: 2, binom: 2, dbinom: 2, tbinom: 2, overset: 2, underset: 2,
+    stackrel: 2, sqrt: 1, underbrace: 1, overbrace: 1, boxed: 1, mathop: 1, mathbin: 1, mathrel: 1, mathord: 1 };
+  // Commands whose arguments are text, names or options: kept as one opaque token.
+  var TEX_OPAQUE = { text: 1, textrm: 1, textit: 1, textbf: 1, textsf: 1, texttt: 1, textup: 1, textnormal: 1,
+    mbox: 1, mathrm: 1, operatorname: 1, label: 1, tag: 1, begin: 1, end: 1, color: 1, textcolor: 2, colorbox: 2,
+    htmlData: 2, htmlClass: 2, htmlId: 2, htmlStyle: 2, href: 2, url: 1, hspace: 1, vspace: 1 };
+
+  function texTokens(tex, from, to) {
+    var out = [], i = from;
+    while (i < to) {
+      var ch = tex[i];
+      if (/\s/.test(ch)) { i++; continue; }
+      if (ch === "%") { while (i < to && tex[i] !== "\n") i++; continue; }
+      var s = i;
+      if (ch === "\\") {
+        var m = /^\\([A-Za-z]+\*?|[\s\S])/.exec(tex.slice(i, to));
+        var name = m ? m[1] : "";
+        i += m ? m[0].length : 1;
+        var base = name.replace("*", "");
+        var nOpaque = TEX_OPAQUE[base];
+        if (nOpaque) {
+          for (var a = 0; a < nOpaque; a++) {
+            while (i < to && /\s/.test(tex[i])) i++;
+            if (tex[i] === "[") { var jb = findClose(tex, "]", i + 1); i = jb < 0 ? to : jb + 1; a--; continue; }
+            if (tex[i] === "{") { var j = findClose(tex, "}", i + 1); i = j < 0 ? to : j + 1; }
+          }
+          out.push({ c: tex.slice(s, i).replace(/\s+/g, ""), s: s, e: i, opaque: true });
+          continue;
+        }
+        out.push({ c: "\\" + name, s: s, e: i, cmd: /^[A-Za-z]/.test(name) ? base : null });
+        continue;
+      }
+      if (ch === "{") {
+        var jj = findClose(tex, "}", i + 1);
+        if (jj < 0 || jj >= to) { out.push({ c: "{", s: i, e: i + 1, brace: 1 }); i++; continue; }
+        var inner = texTokens(tex, i + 1, jj);
+        if (inner.length === 1) out.push({ c: inner[0].c, s: i, e: jj + 1, opaque: inner[0].opaque });
+        else {
+          out.push({ c: "{", s: i, e: i + 1, brace: 1 });
+          Array.prototype.push.apply(out, inner);
+          out.push({ c: "}", s: jj, e: jj + 1, brace: -1 });
+        }
+        i = jj + 1;
+        continue;
+      }
+      var cp = String.fromCodePoint(tex.codePointAt(i));
+      out.push({ c: cp, s: i, e: i + cp.length });
+      i += cp.length;
+    }
+    return out;
+  }
+
+  /** Index of the last token of the TeX unit (token or braced region) starting at k. */
+  function texUnitEnd(toks, k) {
+    if (k >= toks.length) return -1;
+    if (toks[k].brace !== 1) return k;
+    var depth = 0;
+    for (var q = k; q < toks.length; q++) {
+      depth += toks[q].brace || 0;
+      if (depth === 0) return q;
+    }
+    return toks.length - 1;
+  }
+
+  /** Mark argument positions: `locked` (inside a modifier) and `slot` (single-symbol argument). */
+  function markTexArgs(toks) {
+    function unitEnd(k) { return texUnitEnd(toks, k); }
+    for (var k = 0; k < toks.length; k++) {
+      var t = toks[k];
+      var n = 0, lock = false;
+      if (t.cmd && TEX_MODIFIERS[t.cmd]) { n = 1; lock = true; }
+      else if (t.cmd && TEX_ARGS[t.cmd]) n = TEX_ARGS[t.cmd];
+      else if (t.c === "_" || t.c === "^") n = 1;
+      var p = k + 1;
+      for (var a = 0; a < n && p < toks.length; a++) {
+        var end = unitEnd(p);
+        for (var q = p; q <= end; q++) { if (lock) toks[q].locked = true; else if (q === p) toks[q].slot = true; }
+        p = end + 1;
+      }
+    }
+  }
+
+  function stripExplain(tex) {
+    var out = "", i = 0, m;
+    var re = /\\explain\s*\{/g;
+    while ((m = re.exec(tex))) {
+      var a1 = m.index + m[0].length;
+      var e1 = findClose(tex, "}", a1);
+      if (e1 < 0) break;
+      var rest = tex.slice(e1 + 1).match(/^\s*\{/);
+      var e2 = rest ? findClose(tex, "}", e1 + 1 + rest[0].length) : -1;
+      out += tex.slice(i, m.index) + "{" + tex.slice(a1, e1) + "}";
+      i = e2 < 0 ? e1 + 1 : e2 + 1;
+      re.lastIndex = i;
+    }
+    return out + tex.slice(i);
+  }
+
+  var NOTATION = [];   // id → { key, meaning (string|function), type }
+  var notationStats = { annotated: 0, skipped: 0 };
+
+  function notationEntry(key, meaning, type) {
+    var e = { id: NOTATION.length, key: key, meaning: meaning, type: type || "", used: false };
+    NOTATION.push(e);
+    return e;
+  }
+
+  /** Build a matcher from a { texKey: entry } map. */
+  function compileGlossary(map) {
+    var byFirst = {};
+    Object.keys(map).forEach(function (key) {
+      var toks = texTokens(key, 0, key.length).map(function (t) { return t.c; });
+      if (!toks.length) return;
+      (byFirst[toks[0]] = byFirst[toks[0]] || []).push({ toks: toks, entry: map[key] });
+    });
+    Object.keys(byFirst).forEach(function (k) { byFirst[k].sort(function (a, b) { return b.toks.length - a.toks.length; }); });
+    return { byFirst: byFirst, explained: {} };
+  }
+
+  function wrapSym(id, body) { return "{\\htmlData{mbz-sym=" + id + "}{" + body + "}}"; }
+
+  function annotateTex(tex, gl) {
+    // 1. inline one-off explanations: \explain{symbol}{meaning}
+    var pre = "", i = 0, m;
+    var re = /\\explain\s*\{/g;
+    while ((m = re.exec(tex))) {
+      var a1 = m.index + m[0].length;
+      var e1 = findClose(tex, "}", a1);
+      if (e1 < 0) break;
+      var rest = tex.slice(e1 + 1).match(/^\s*\{/);
+      if (!rest) break;
+      var a2 = e1 + 1 + rest[0].length;
+      var e2 = findClose(tex, "}", a2);
+      if (e2 < 0) break;
+      var sym = tex.slice(a1, e1), meaning = tex.slice(a2, e2);
+      var dk = sym + "\u0000" + meaning;
+      var entry = gl.explained[dk] || (gl.explained[dk] = notationEntry(sym, meaning, ""));
+      entry.used = true;
+      notationStats.annotated++;
+      pre += tex.slice(i, m.index) + wrapSym(entry.id, sym);
+      i = e2 + 1;
+      re.lastIndex = i;
+    }
+    tex = pre + tex.slice(i);
+    return annotateCore(tex, gl);
+  }
+
+  function annotateCore(tex, gl) {
+    // Glossary symbols, longest match first. A match absorbs trailing scripts
+    // (K^\top, x_t', …) so the script stays attached to a real symbol and KaTeX
+    // keeps its normal script placement; symbols inside the scripts are annotated recursively.
+    var toks = texTokens(tex, 0, tex.length);
+    markTexArgs(toks);
+    var out = "", last = 0, k = 0;
+    while (k < toks.length) {
+      var t = toks[k], done = false;
+      var cands = !t.locked && gl.byFirst[t.c];
+      if (cands) {
+        for (var ci = 0; ci < cands.length && !done; ci++) {
+          var cand = cands[ci], L = cand.toks.length;
+          if (k + L > toks.length || (L > 1 && t.slot)) continue;
+          var ok = true, depth = 0;
+          for (var q = 0; q < L; q++) {
+            var tq = toks[k + q];
+            if (tq.c !== cand.toks[q] || (q > 0 && tq.locked && !toks[k].cmd)) { ok = false; break; }
+            depth += tq.brace || 0;
+          }
+          if (!ok || depth !== 0) continue;
+          var endTok = toks[k + L - 1];
+          var body = tex.slice(t.s, endTok.e);
+          var j = k + L;
+          while (j < toks.length && (toks[j].c === "^" || toks[j].c === "_" || toks[j].c === "'")) {
+            if (toks[j].c === "'") { body += tex.slice(endTok.e, toks[j].e); endTok = toks[j]; j++; continue; }
+            var ue = texUnitEnd(toks, j + 1);
+            if (ue < 0) break;
+            body += tex.slice(endTok.e, toks[j + 1].s) + annotateCore(tex.slice(toks[j + 1].s, toks[ue].e), gl);
+            endTok = toks[ue];
+            j = ue + 1;
+          }
+          out += tex.slice(last, t.s) + wrapSym(cand.entry.id, body);
+          last = endTok.e;
+          cand.entry.used = true;
+          notationStats.annotated++;
+          k = j;
+          done = true;
+        }
+      }
+      if (!done) k++;
+    }
+    return out + tex.slice(last);
+  }
+
+  // ======================================================================
   //  Rendering helpers (KaTeX)
   // ======================================================================
   var katexOptions;
@@ -766,7 +973,10 @@
     var deck = document.querySelector(".deck");
     if (!deck) { console.error("[MBZUAI] No .deck element found."); return; }
     var cfg = readConfig(deck);
-    katexOptions = { macros: cfg.macros, strict: "ignore", trust: false, output: "htmlAndMathml" };
+    katexOptions = {
+      macros: cfg.macros, strict: "ignore", output: "htmlAndMathml",
+      trust: function (ctx) { return ctx.command === "\\htmlData"; }
+    };
 
     var slides = $all(":scope > section.slide, :scope > .slide", deck);
     var titleSlide = slides.filter(function (s) { return s.classList.contains("title-slide"); })[0] || null;
@@ -1049,18 +1259,90 @@
       });
     });
 
-    // ── 9. Render math ──────────────────────────────────────────────────
+    // ── 9. Notation glossaries (hover a symbol to see its meaning) ───────
+    var glossaries = slides.map(function () { return null; });
+    var deckKeys = [];
+    if (cfg.notationHover) {
+      var parseNotationJson = function (sc, into) {
+        try {
+          var obj = JSON.parse(sc.textContent);
+          Object.keys(obj).forEach(function (key) {
+            var v = obj[key];
+            var meaning = typeof v === "string" ? v : (v && (v.meaning || v.text || v.description)) || "";
+            into[key] = notationEntry(key, meaning, v && typeof v === "object" ? v.type : "");
+          });
+        } catch (e) { warn("Invalid notation JSON: " + e.message); }
+      };
+      var deckMap = {};
+      $all('script[type="application/json"]#notation, script[type="application/json"][data-notation]').forEach(function (sc) {
+        if (!sc.closest(".slide")) parseNotationJson(sc, deckMap);
+      });
+      deckKeys = Object.keys(deckMap).map(function (k) { return deckMap[k]; });
+
+      // Harvest notation tables: first cell = symbol(s), last cell = meaning, middle = type.
+      var tableGlobal = {};
+      var tableLocal = slides.map(function () { return {}; });
+      slides.forEach(function (s, si) {
+        $all("table.notation tbody tr", s).forEach(function (tr) {
+          var cells = tr.cells;
+          if (!cells || cells.length < 2) return;
+          var keys = [];
+          if (tr.dataset.sym) keys = tr.dataset.sym.split("|");
+          else $all(".mbz-math", cells[0]).forEach(function (mm) {
+            splitTopLevel(mm.getAttribute("data-tex") || "", /,/y).forEach(function (part) {
+              part = part.replace(/\\(?:[ ,;:!]|quad|qquad)|~/g, " ").trim();
+              if (part) keys.push(part);
+            });
+          });
+          var meaningCell = cells[cells.length - 1];
+          var type = cells.length >= 3 ? cells[1].textContent.trim() : "";
+          keys.forEach(function (key) {
+            var e = notationEntry(key, function () { return meaningCell.innerHTML; }, type);
+            tableLocal[si][key] = e;
+            if (!tableGlobal[key] && tr.closest("table").dataset.notation !== "local") tableGlobal[key] = e;
+          });
+        });
+      });
+
+      slides.forEach(function (s, si) {
+        var local = {};
+        $all('script[type="application/json"].notation, script[type="application/json"][data-notation]', s)
+          .forEach(function (sc) { parseNotationJson(sc, local); });
+        var map = Object.assign({}, tableGlobal, deckMap, tableLocal[si], local);
+        glossaries[si] = compileGlossary(map);
+      });
+    }
+
+    // ── 10. Render math ─────────────────────────────────────────────────
+    function renderSlideTex(tex, display, si) {
+      var gl = glossaries[si];
+      if (gl && window.katex) {
+        var annotated = annotateTex(tex, gl);
+        if (annotated !== tex) {
+          try {
+            return window.katex.renderToString(annotated, Object.assign({}, katexOptions, { displayMode: display, throwOnError: true }));
+          } catch (e) { notationStats.skipped++; }
+        }
+      }
+      return renderTex(stripExplain(tex), display, si + 1);
+    }
     slides.forEach(function (s, si) {
       $all(".mbz-math", s).forEach(function (m) {
         var display = m.getAttribute("data-display") === "true";
-        m.innerHTML = renderTex(m.getAttribute("data-tex"), display, si + 1);
+        m.innerHTML = renderSlideTex(m.getAttribute("data-tex"), display, si);
       });
       $all(".equation > .eq-body", s).forEach(function (b) {
-        b.innerHTML = renderTex(b.getAttribute("data-tex"), true, si + 1);
+        b.innerHTML = renderSlideTex(b.getAttribute("data-tex"), true, si);
       });
     });
+    report.notation = {
+      entries: NOTATION.length,
+      annotatedSymbols: notationStats.annotated,
+      unusedDeckKeys: deckKeys.filter(function (e) { return !e.used; }).map(function (e) { return e.key; }),
+      fallbackFormulas: notationStats.skipped
+    };
 
-    // ── 10. References slide(s) ─────────────────────────────────────────
+    // ── 11. References slide(s) ─────────────────────────────────────────
     var refSlides = slides.filter(function (s) { return s.classList.contains("references"); });
     refSlides.forEach(function (s) {
       var main = s.querySelector(".mbz-main") || s;
@@ -1202,6 +1484,93 @@
   // ======================================================================
   //  Viewer
   // ======================================================================
+  function initNotationHover(deck) {
+    if (!NOTATION.length) return function () {};
+    var tip = el("div", "mbz-tip");
+    tip.setAttribute("role", "tooltip");
+    document.body.appendChild(tip);
+    var current = null;
+    var cache = {};
+
+    function meaningHtml(e) {
+      if (typeof e.meaning === "function") return e.meaning();
+      if (cache[e.id] != null) return cache[e.id];
+      var box = el("div");
+      box.innerHTML = e.meaning;            // author-supplied HTML, may contain $math$
+      segmentMath(box);
+      $all(".mbz-math", box).forEach(function (m) {
+        m.innerHTML = renderTex(m.getAttribute("data-tex"), m.getAttribute("data-display") === "true", "notation");
+      });
+      return (cache[e.id] = box.innerHTML);
+    }
+    function clear() {
+      $all(".mbz-sym-active, .mbz-sym-hover", deck).forEach(function (n) { n.classList.remove("mbz-sym-active", "mbz-sym-hover"); });
+    }
+    function hide() { tip.classList.remove("show"); clear(); current = null; }
+    function show(span) {
+      if (span === current) return;
+      var e = NOTATION[+span.getAttribute("data-mbz-sym")];
+      if (!e) return;
+      clear();
+      current = span;
+      var slide = span.closest(".slide");
+      $all('[data-mbz-sym="' + e.id + '"]', slide).forEach(function (n) { n.classList.add("mbz-sym-active"); });
+      span.classList.add("mbz-sym-hover");
+      tip.innerHTML = '<div class="mbz-tip-head"><span class="mbz-tip-sym">' + renderTex(stripExplain(e.key), false, "notation") + "</span>" +
+        (e.type ? '<span class="mbz-tip-type">' + escapeHtml(e.type) + "</span>" : "") + "</div>" +
+        '<div class="mbz-tip-body">' + meaningHtml(e) + "</div>";
+      var scale = parseFloat(deck.style.getPropertyValue("--scale")) || 1;
+      tip.style.fontSize = Math.max(13, 19 * scale) + "px";
+      tip.style.maxWidth = Math.max(240, 480 * scale) + "px";
+      tip.style.left = "0px"; tip.style.top = "0px";
+      tip.classList.add("show");
+      var r = span.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight, gap = 10 * scale + 4;
+      var left = Math.min(window.innerWidth - tw - 8, Math.max(8, r.left + r.width / 2 - tw / 2));
+      var top = r.top - th - gap;
+      if (top < 8) top = r.bottom + gap;
+      tip.style.left = left + "px";
+      tip.style.top = top + "px";
+    }
+    // Geometric hit-testing: KaTeX stacks positioned layers (vlists, radicals) over
+    // glyphs, so elementFromPoint is unreliable. Pick the smallest symbol box under the pointer.
+    function symAt(x, y) {
+      var slide = deck.querySelector(":scope > .slide.active");
+      if (!slide) return null;
+      var best = null, bestArea = Infinity;
+      $all("[data-mbz-sym]", slide).forEach(function (n) {
+        if (n.closest(".fragment:not(.visible)")) return;
+        var rects = n.getClientRects();
+        for (var q = 0; q < rects.length; q++) {
+          var r = rects[q];
+          if (x >= r.left - 1 && x <= r.right + 1 && y >= r.top - 1 && y <= r.bottom + 1) {
+            var area = r.width * r.height;
+            if (area < bestArea) { best = n; bestArea = area; }
+          }
+        }
+      });
+      return best;
+    }
+    var pending = null;
+    deck.addEventListener("mousemove", function (ev) {
+      if (document.body.classList.contains("mbz-overview")) return;
+      var x = ev.clientX, y = ev.clientY;
+      if (pending) return;
+      pending = requestAnimationFrame(function () {
+        pending = null;
+        var span = symAt(x, y);
+        if (span) show(span); else if (current) hide();
+      });
+    });
+    deck.addEventListener("mouseleave", hide);
+    deck.addEventListener("click", function (ev) {   // touch screens: tap a symbol
+      if (document.body.classList.contains("mbz-overview")) return;
+      var span = symAt(ev.clientX, ev.clientY);
+      if (span) { show(span); ev.stopPropagation(); }
+    }, true);
+    window.addEventListener("scroll", hide, true);
+    return hide;
+  }
+
   function initViewer(deck, slides) {
     var params = new URLSearchParams(location.search);
     var printMode = params.has("print");
@@ -1235,6 +1604,7 @@
     }
     function show(i, st, noHash) {
       i = Math.max(0, Math.min(slides.length - 1, i));
+      if (hideTip) hideTip();
       slides[idx].classList.remove("active");
       idx = i;
       slides[idx].classList.add("active");
@@ -1262,7 +1632,8 @@
       return;
     }
 
-    window.addEventListener("resize", fit);
+    var hideTip = initNotationHover(deck);
+    window.addEventListener("resize", function () { hideTip(); fit(); });
     fit();
     if (!gotoHash(location.hash)) show(0, 0, true);
 
@@ -1286,6 +1657,7 @@
         if (!document.fullscreenElement) document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
         else document.exitFullscreen && document.exitFullscreen();
       } else if (k === "d") document.body.classList.toggle("mbz-debug");
+      else if (k === "g") document.body.classList.toggle("mbz-show-syms");
     });
 
     function toggleOverview() {

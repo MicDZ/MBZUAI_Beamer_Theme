@@ -36,6 +36,7 @@ as well as by people.
 
 - **KaTeX math**: `$…$`, `\(…\)`, `$$…$$`, `\[…\]`, `\begin{equation|align|gather}`, `\label`/`\eqref`, `\tag`, and deck-wide macros. Numbered equations put "(1)" at the right margin, as amsmath does.
 - **Citations from BibTeX** pasted into the page: numeric `[1–3]` (unsrt order) or author-year `(Vaswani et al., 2017)` (natbib), `\cite`/`\citet`/`<cite>`, short full references at the bottom of each slide, and an auto-paginated References slide.
+- **Notation hover**: hover any symbol in a formula to see what it means, with every occurrence on the slide highlighted. Meanings come from a deck glossary, from notation tables (harvested automatically), or from inline `\explain{…}{…}`.
 - **Footnotes**: superscript markers, with notes below a LaTeX-style footnote rule at the bottom of the slide (numbers or `* † ‡`).
 - **Numbered** figures, tables, algorithms and theorem-like environments (amsthm style), with `\cref`/`\ref`-style cross-references that jump to the target slide.
 - Booktabs tables, Beamer-style blocks, source locators, section dividers, an outline, and fragments (`\pause`).

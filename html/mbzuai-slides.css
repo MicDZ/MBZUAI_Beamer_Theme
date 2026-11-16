@@ -475,6 +475,57 @@ body.mbz-debug .slide.mbz-overflow { outline: 4px solid #d00; outline-offset: -4
 }
 .slide .katex-error { color: var(--mbz-alert); font-family: var(--font-mono); font-size: 0.7em; }
 
+/* Notation hover: symbols with a glossary entry (see AUTHORING.md §5a) */
+.slide .katex [data-mbz-sym] {
+  cursor: help;
+  border-radius: 0.12em;
+  transition: background-color 0.12s ease;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+/* KaTeX draws radicals, wide accents and rules as overlays; let hovers pass through them */
+.slide .katex svg, .slide .katex .frac-line, .slide .katex .hide-tail,
+.slide .katex .overline-line, .slide .katex .underline-line { pointer-events: none; }
+.slide .katex [data-mbz-sym].mbz-sym-active { background: rgba(229, 198, 135, 0.38); }
+.slide .katex [data-mbz-sym].mbz-sym-hover { background: rgba(229, 198, 135, 0.8); }
+body.mbz-show-syms .slide .katex [data-mbz-sym]:not(.mbz-sym-active) {
+  background: rgba(21, 70, 119, 0.08);
+  box-shadow: inset 0 -0.08em 0 rgba(21, 70, 119, 0.55);
+}
+.mbz-tip {
+  position: fixed;
+  left: 0; top: 0;
+  z-index: 1000;
+  max-width: 480px;
+  padding: 0.45em 0.75em 0.55em;
+  background: var(--mbz-dark-navy);
+  color: var(--mbz-white);
+  border-left: 4px solid var(--mbz-sand);
+  border-radius: 4px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.32);
+  font-family: var(--font-sans);
+  font-size: 19px;
+  line-height: 1.38;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity 0.12s ease, transform 0.12s ease, visibility 0s linear 0.12s;
+}
+.mbz-tip.show { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.mbz-tip-head { display: flex; align-items: baseline; gap: 0.7em; margin-bottom: 0.15em; }
+.mbz-tip-sym .katex { font-size: 1.3em; color: var(--mbz-sand); }
+.mbz-tip-type {
+  font-size: 0.72em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+.mbz-tip-body .katex { font-size: 1.05em; }
+.mbz-tip-body p { margin: 0; }
+.mbz-tip a { color: var(--mbz-sand); }
+@media print { .mbz-tip { display: none !important; } }
+
 /* Notation table that accompanies an equation */
 .slide table.notation td:first-child { white-space: nowrap; text-align: center; }
 
