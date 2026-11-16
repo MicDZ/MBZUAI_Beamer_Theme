@@ -30,6 +30,11 @@ as well as by people.
   <img src="assets/slides-html/slide-10.jpg" width="49%" alt="Booktabs table with caption">
 </p>
 
+<p align="center">
+  <img src="assets/slides-html/notation-hover.gif" width="90%" alt="Hovering a symbol in a formula shows its meaning and highlights every occurrence on the slide">
+  <br><em>Notation hover: point at any symbol in a formula to see what it means.</em>
+</p>
+
 **Live demo:** <http://www.micdz.cn/MBZUAI_Beamer_Theme/html/demo.html>. Use ← → to navigate and `o` for the overview.
 
 **Academic typesetting**
@@ -92,38 +97,12 @@ The full feature reference is in [`html/AUTHORING.md`](html/AUTHORING.md). `html
 ## Preview
 
 <p align="center">
-  <img src="assets/slides/slide-01.jpg" width="800" alt="Title Slide"><br>
-  <em>Title Slide</em>
+  <img src="assets/slides/slide-01.jpg" width="49%" alt="Title slide">
+  <img src="assets/slides/slide-04.jpg" width="49%" alt="Content with blocks">
 </p>
-
 <p align="center">
-  <img src="assets/slides/slide-02.jpg" width="800" alt="Outline"><br>
-  <em>Outline</em>
-</p>
-
-<p align="center">
-  <img src="assets/slides/slide-04.jpg" width="800" alt="Content with Blocks"><br>
-  <em>Content with Blocks</em>
-</p>
-
-<p align="center">
-  <img src="assets/slides/slide-05.jpg" width="800" alt="Two Column Layout"><br>
-  <em>Two Column Layout</em>
-</p>
-
-<p align="center">
-  <img src="assets/slides/slide-07.jpg" width="800" alt="TikZ Diagram"><br>
-  <em>TikZ Diagram</em>
-</p>
-
-<p align="center">
-  <img src="assets/slides/slide-08.jpg" width="800" alt="Table Example"><br>
-  <em>Table Example</em>
-</p>
-
-<p align="center">
-  <img src="assets/slides/slide-10.jpg" width="800" alt="Thank You Slide"><br>
-  <em>Thank You Slide</em>
+  <img src="assets/slides/slide-07.jpg" width="49%" alt="TikZ diagram">
+  <img src="assets/slides/slide-08.jpg" width="49%" alt="Table example">
 </p>
 
 ## Installation

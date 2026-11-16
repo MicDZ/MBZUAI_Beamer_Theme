@@ -1550,16 +1550,10 @@
       });
       return best;
     }
-    var pending = null;
     deck.addEventListener("mousemove", function (ev) {
       if (document.body.classList.contains("mbz-overview")) return;
-      var x = ev.clientX, y = ev.clientY;
-      if (pending) return;
-      pending = requestAnimationFrame(function () {
-        pending = null;
-        var span = symAt(x, y);
-        if (span) show(span); else if (current) hide();
-      });
+      var span = symAt(ev.clientX, ev.clientY);   // a few dozen rects per slide: cheap enough per event
+      if (span) show(span); else if (current) hide();
     });
     deck.addEventListener("mouseleave", hide);
     deck.addEventListener("click", function (ev) {   // touch screens: tap a symbol
