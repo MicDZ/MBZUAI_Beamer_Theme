@@ -30,6 +30,8 @@ as well as by people.
   <img src="assets/slides-html/slide-10.jpg" width="49%" alt="Booktabs table with caption">
 </p>
 
+**Live demo:** <http://www.micdz.cn/MBZUAI_Beamer_Theme/html/demo.html>. Use ← → to navigate and `o` for the overview.
+
 **Academic typesetting**
 
 - **KaTeX math**: `$…$`, `\(…\)`, `$$…$$`, `\[…\]`, `\begin{equation|align|gather}`, `\label`/`\eqref`, `\tag`, and deck-wide macros. Numbered equations put "(1)" at the right margin, as amsmath does.
