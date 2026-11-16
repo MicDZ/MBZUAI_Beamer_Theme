@@ -6,7 +6,7 @@ A deck is one HTML file. Each slide is a `<section class="slide">` on a fixed
 footer and page numbers, numbers equations, figures, tables and theorems, resolves
 citations and cross-references, lays out footnotes, and renders math with **KaTeX**.
 
-Start from `demo.html`, which shows every feature, or `../templates/paper-presentation.html.in`.
+Start from `showcase.html`, which shows every feature, or `../templates/paper-presentation.html.in`. `demo.html` is a complete paper talk built with the theme.
 
 ---
 

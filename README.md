@@ -35,7 +35,7 @@ as well as by people.
   <img src="assets/slides-html/slide-10.jpg" width="49%" alt="Booktabs table with caption">
 </p>
 
-**Live demo:** <http://www.micdz.cn/MBZUAI_Beamer_Theme/html/demo.html>. Use ← → to navigate and `o` for the overview.
+**Live demo:** <http://www.micdz.cn/MBZUAI_Beamer_Theme/html/demo.html>, a full paper-reading deck on *Attention Is All You Need*. Use ← → to navigate and `o` for the overview. The feature showcase is at [`html/showcase.html`](http://www.micdz.cn/MBZUAI_Beamer_Theme/html/showcase.html).
 
 **Academic typesetting**
 
@@ -56,7 +56,7 @@ as well as by people.
 
 ```bash
 cp -r html/ my-talk/theme/
-cp html/demo.html my-talk/index.html     # then change the CSS/JS paths to theme/…
+cp html/showcase.html my-talk/index.html # then change the CSS/JS paths to theme/…
 open my-talk/index.html                  # ← → to navigate, o = overview, f = fullscreen
 html/tools/check.sh my-talk/index.html   # QA report
 html/tools/export-pdf.sh my-talk/index.html
@@ -87,7 +87,7 @@ A minimal deck:
 </main>
 ```
 
-The full feature reference is in [`html/AUTHORING.md`](html/AUTHORING.md). `html/demo.html` exercises every feature, and
+The full feature reference is in [`html/AUTHORING.md`](html/AUTHORING.md). `html/showcase.html` exercises every feature, `html/demo.html` is a complete paper talk, and
 [`templates/paper-presentation.html.in`](templates/paper-presentation.html.in) is the HTML version of the paper-talk template.
 
 ---
@@ -269,7 +269,9 @@ MBZUAI_Beamer_Theme/
 │   ├── mbzuai-slides.css          #   Styles (brand, layout, academic typesetting)
 │   ├── mbzuai-slides.js           #   Runtime (KaTeX, numbering, citations, footnotes, viewer, QA)
 │   ├── AUTHORING.md               #   Authoring guide for people and agents
-│   ├── demo.html                  #   Example HTML deck
+│   ├── showcase.html              #   Feature showcase deck
+│   ├── demo.html                  #   Example paper talk (Attention Is All You Need)
+│   ├── demo-figures/              #   Paper figures for the demo (see SOURCES.md)
 │   ├── assets/                    #   SVG logos and pattern
 │   └── tools/                     #   check.sh, screenshot.sh, export-pdf.sh (headless Chrome)
 ├── assets/
