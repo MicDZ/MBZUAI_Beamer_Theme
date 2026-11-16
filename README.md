@@ -1,5 +1,10 @@
 # MBZUAI Slides Theme (Beamer + HTML)
 
+<p align="center">
+  <img src="assets/slides-html/notation-hover.gif" width="100%" alt="Hovering a symbol in a formula shows its meaning and highlights every occurrence on the slide">
+  <br><em>HTML slides with KaTeX math. Point at any symbol in a formula to see what it means. <a href="http://www.micdz.cn/MBZUAI_Beamer_Theme/html/demo.html">Live demo →</a></em>
+</p>
+
 A presentation theme based on the **Mohamed bin Zayed University of Artificial Intelligence (MBZUAI)** brand guidelines (March 2026, V1), available in two forms that look the same:
 
 - **LaTeX Beamer theme**: `beamertheme*.sty` (described below)
@@ -28,11 +33,6 @@ as well as by people.
 <p align="center">
   <img src="assets/slides-html/slide-08.jpg" width="49%" alt="Theorem environments">
   <img src="assets/slides-html/slide-10.jpg" width="49%" alt="Booktabs table with caption">
-</p>
-
-<p align="center">
-  <img src="assets/slides-html/notation-hover.gif" width="90%" alt="Hovering a symbol in a formula shows its meaning and highlights every occurrence on the slide">
-  <br><em>Notation hover: point at any symbol in a formula to see what it means.</em>
 </p>
 
 **Live demo:** <http://www.micdz.cn/MBZUAI_Beamer_Theme/html/demo.html>. Use ← → to navigate and `o` for the overview.
