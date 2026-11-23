@@ -1647,12 +1647,61 @@
       else if (k === "Home") { show(0, 0); e.preventDefault(); }
       else if (k === "End") { show(slides.length - 1, "end"); e.preventDefault(); }
       else if (k === "o" || k === "Escape") { toggleOverview(); e.preventDefault(); }
-      else if (k === "f") {
-        if (!document.fullscreenElement) document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
-        else document.exitFullscreen && document.exitFullscreen();
-      } else if (k === "d") document.body.classList.toggle("mbz-debug");
+      else if (k === "f" || k === "F" || k === "F11") { toggleFullscreen(); e.preventDefault(); }
+      else if (k === "d") document.body.classList.toggle("mbz-debug");
       else if (k === "g") document.body.classList.toggle("mbz-show-syms");
     });
+
+    // Presentation fullscreen. Browser-level fullscreen (F11, the macOS green
+    // button) keeps the tab bar on some setups; the Fullscreen API on the page
+    // itself (what Google Slides "Present" uses) hides all browser UI.
+    function fsElement() { return document.fullscreenElement || document.webkitFullscreenElement || null; }
+    function toggleFullscreen() {
+      var el = document.documentElement;
+      if (!fsElement()) {
+        var req = el.requestFullscreen || el.webkitRequestFullscreen;
+        if (req) { var p = req.call(el, { navigationUI: "hide" }); if (p && p.catch) p.catch(function () {}); }
+      } else {
+        var ex = document.exitFullscreen || document.webkitExitFullscreen;
+        if (ex) ex.call(document);
+      }
+    }
+    var fsBtn = document.createElement("button");
+    fsBtn.type = "button";
+    fsBtn.className = "mbz-fs-btn";
+    fsBtn.title = "Present fullscreen (F)";
+    fsBtn.setAttribute("aria-label", "Toggle fullscreen");
+    fsBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path class="mbz-fs-enter" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="mbz-fs-exit" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+    fsBtn.addEventListener("click", function (e) { e.stopPropagation(); toggleFullscreen(); fsBtn.blur(); });
+    document.body.appendChild(fsBtn);
+    var fsHint = document.createElement("div");
+    fsHint.className = "mbz-fs-hint";
+    fsHint.textContent = "Press F to present fullscreen and hide the browser tabs";
+    document.body.appendChild(fsHint);
+
+    var idleTimer = null;
+    function wake() {
+      document.body.classList.add("mbz-ui-awake");
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(function () { document.body.classList.remove("mbz-ui-awake"); }, 2000);
+    }
+    document.addEventListener("mousemove", wake);
+    function browserFullscreen() {
+      if (fsElement()) return false;
+      if (window.matchMedia && window.matchMedia("(display-mode: fullscreen)").matches) return true;
+      return window.outerHeight >= screen.height - 1 && window.outerWidth >= screen.width - 1;
+    }
+    var hintTimer = null;
+    function syncFullscreen() {
+      document.body.classList.toggle("mbz-fullscreen", !!fsElement());
+      var show = browserFullscreen();
+      fsHint.classList.toggle("show", show);
+      clearTimeout(hintTimer);
+      if (show) hintTimer = setTimeout(function () { fsHint.classList.remove("show"); }, 5000);
+    }
+    document.addEventListener("fullscreenchange", syncFullscreen);
+    document.addEventListener("webkitfullscreenchange", syncFullscreen);
+    window.addEventListener("resize", syncFullscreen);
 
     function toggleOverview() {
       var on = document.body.classList.toggle("mbz-overview");

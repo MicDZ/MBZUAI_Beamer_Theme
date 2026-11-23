@@ -266,7 +266,7 @@ about 60 words per slide. When the QA report flags overflow, split the slide or 
 
 ## 11. Viewing, QA, export
 
-- **Keys:** → / Space / PgDn next, ← / PgUp previous, ↑ ↓ jump a whole slide, Home/End, `o` or Esc overview, `f` fullscreen, `g` marks the symbols that have notation entries, `d` toggles debug outlines.
+- **Keys:** → / Space / PgDn next, ← / PgUp previous, ↑ ↓ jump a whole slide, Home/End, `o` or Esc overview, `f` (or F11, or the ⛶ button bottom-right) presentation fullscreen that hides the browser tabs, `g` marks the symbols that have notation entries, `d` toggles debug outlines.
 - **URLs:** `deck.html#/5` opens slide 5, `deck.html#fig:arch` opens the slide containing `#fig:arch`, `?print` lays out all slides for printing, and `?debug` outlines overflowing slides in red.
 - **QA report:** once rendered, the theme sets `<html data-mbz-ready="true">`, fires the `mbzuai:ready` event, sets `window.MBZUAI.report`,
   and adds `<script id="mbz-report" type="application/json">` containing:

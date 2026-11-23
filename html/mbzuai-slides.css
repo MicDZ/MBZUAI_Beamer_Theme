@@ -96,6 +96,45 @@ body.mbz-overview .deck > .slide {
 }
 body.mbz-overview .deck > .slide.ov-current { outline-color: var(--mbz-sand); }
 
+/* Fullscreen button (bottom-right, appears on mouse move) and browser-fullscreen hint */
+.mbz-fs-btn {
+  position: fixed;
+  right: 16px; bottom: 16px;
+  z-index: 900;
+  display: flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  padding: 0;
+  border: 0; border-radius: 8px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+body.mbz-ui-awake .mbz-fs-btn { opacity: 0.85; pointer-events: auto; }
+.mbz-fs-btn:hover { opacity: 1 !important; background: rgba(0, 0, 0, 0.7); }
+.mbz-fs-btn .mbz-fs-exit, body.mbz-fullscreen .mbz-fs-btn .mbz-fs-enter { display: none; }
+body.mbz-fullscreen .mbz-fs-btn .mbz-fs-exit { display: inline; }
+body.mbz-fullscreen:not(.mbz-ui-awake) { cursor: none; }
+.mbz-fs-hint {
+  position: fixed;
+  left: 50%; top: 20px;
+  z-index: 900;
+  transform: translate(-50%, -8px);
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font: 15px/1.4 system-ui, -apple-system, sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.mbz-fs-hint.show { opacity: 1; transform: translate(-50%, 0); }
+body.mbz-overview .mbz-fs-btn, body.mbz-print .mbz-fs-btn,
+body.mbz-print .mbz-fs-hint { display: none; }
+
 /* Scroll / print mode (?print, or the browser print dialog) */
 body.mbz-print { overflow: auto; background: #888; }
 body.mbz-print .deck { position: static; }
@@ -123,6 +162,7 @@ body.mbz-print .fragment { opacity: 1 !important; visibility: visible !important
     page-break-after: always;
   }
   .fragment { opacity: 1 !important; visibility: visible !important; }
+  .mbz-fs-btn, .mbz-fs-hint { display: none !important; }
   .slide.mbz-overflow::after { display: none !important; }
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 }
