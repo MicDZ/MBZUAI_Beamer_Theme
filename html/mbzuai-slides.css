@@ -569,6 +569,28 @@ body.mbz-show-syms .slide .katex [data-mbz-sym]:not(.mbz-sym-active) {
 /* Notation table that accompanies an equation */
 .slide table.notation td:first-child { white-space: nowrap; text-align: center; }
 
+/* Notation box: the one place on each slide where formula symbols are defined.
+   <div class="block notation-box" data-title="Notation">
+     <table class="notation"><tr><td>$Q$</td><td>queries …</td></tr> …</table>
+   </div>
+   Same look and position on every slide, so the audience always knows where to look.
+   Each <tr> is one entry; entries flow into as many columns as fit (each at least
+   --notation-col wide, default 16em), so short entries share a line. Set
+   style="--notation-col:20em" on the box for longer meanings, or 100% for one per line.
+   Its table rows also feed the notation-hover glossary. */
+.slide .block.notation-box { --notation-col: 16em; font-size: 0.8em; border-left: 4px solid var(--mbz-dark-navy); }
+.slide .block.notation-box > .block-title { background: var(--mbz-dark-navy); padding: 0.1em 0.55em 0.08em; }
+.slide .block.notation-box > .block-body { padding: 0.32em 0.6em 0.36em; }
+.slide .block.notation-box table.notation { display: block; width: 100%; margin: 0; border: 0; }
+.slide .block.notation-box table.notation > tbody {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--notation-col)), 1fr));
+  gap: 0.18em 1.4em;
+}
+.slide .block.notation-box table.notation tr { display: flex; align-items: baseline; gap: 0.5em; border: 0; background: none; }
+.slide .block.notation-box table.notation td { display: block; padding: 0; border: 0; background: none; text-align: left; }
+.slide .block.notation-box table.notation td:first-child { flex: none; white-space: nowrap; font-weight: 400; }
+
 /* ── Figures and tables (academic captions) ──────────────────────────────── */
 .slide figure { margin: 0.3em 0 0.6em; text-align: center; }
 .slide figure img, .slide figure svg, .slide figure video, .slide figure canvas {

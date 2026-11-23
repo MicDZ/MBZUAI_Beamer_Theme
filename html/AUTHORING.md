@@ -156,7 +156,18 @@ every symbol that has an entry, which is useful when rehearsing to check coverag
    </script>
    ```
    Put `<script type="application/json" class="notation">{…}</script>` inside a slide to override meanings for that slide only.
-2. **Notation tables** are harvested automatically. In `<table class="notation">`, each row's first cell holds the symbol(s) (comma-separated math), its last
+2. **Notation tables** are harvested automatically. The recommended form is one Notation box per slide, directly below the formulas, holding every symbol the slide introduces:
+   ```html
+   <div class="block notation-box" data-title="Notation">
+     <table class="notation">
+       <tr><td>$Q, K, V$</td><td>queries, keys, values</td></tr>
+       <tr><td>$d_k$</td><td>key/query dimension</td></tr>
+     </table>
+   </div>
+   ```
+   Keep the box in the same place and style on every slide so the audience always knows where to look. Each row
+   is one entry; inside a Notation box, entries flow into as many columns as fit (each at least `--notation-col`,
+   default 16em), so short entries share a line. Set `style="--notation-col:22em"` on the box for longer meanings. In `<table class="notation">`, each row's first cell holds the symbol(s) (comma-separated math), its last
    cell holds the meaning, and a middle cell, if there is one, holds the type. Use `<tr data-sym="\theta^\star">` to set the key explicitly, and
    `<table class="notation" data-notation="local">` to limit a table to its own slide.
 3. **One-off explanations** inside a formula: `\explain{p(z)}{Prior density of the latent $z$}`. These render exactly as `p(z)`.

@@ -18,6 +18,26 @@
 \newcommand{\framesource}[1]{%
   \par\hfill{\tiny\color{mbzuai-subtle}#1}%
 }
+% notationbox: the ONE place on a slide where formula symbols are defined.
+% Same style and position (directly below the formulas) on every slide.
+% One \nt{symbol}{meaning} per symbol; entries fill columns left to right,
+% then wrap (default 3 per line). Use [2] for long meanings, [1] for one per line.
+%   \begin{notationbox}
+%     \nt{$Q$}{queries, one row per position}
+%     \nt{$d_k$}{key/query dimension}
+%   \end{notationbox}
+\newlength{\ntwidth}\newlength{\ntgap}\setlength{\ntgap}{1.2em}
+\newcommand{\nt}[2]{%
+  \parbox[t]{\ntwidth}{\raggedright\hangindent=1.2em\hangafter=1 #1\enspace #2}%
+  \hskip\dimexpr\ntgap\relax plus 1fil\relax\ignorespaces}
+\newenvironment{notationbox}[1][3]{%
+  \setbeamercolor{block title}{bg=mbzuai-dark-navy,fg=white}%
+  \begin{block}{Notation}\footnotesize
+  \setlength{\ntwidth}{\dimexpr(\linewidth-\ntgap*(#1-1))/#1\relax}%
+  \raggedright\setlength{\lineskip}{3pt}\setlength{\lineskiplimit}{2pt}\noindent\ignorespaces
+}{%
+  \par\end{block}%
+}
 % \focuscrop[<includegraphics options>]{<file>}{<clear windows>}
 % Dims everything except the given windows, so one overview figure can be
 % reused stage by stage. Coordinates are fractions of the image (0..1).
@@ -92,10 +112,32 @@
       \small
       \strong{Problem}\par The gap this stage closes.\par\medskip
       \strong{How}\par The idea in one or two sentences.\par\medskip
-      \strong{Uses}\par Inputs, outputs, and key components, e.g.\ $z_t=f_\theta(x_t)$, where $z_t$ is the per-frame feature.
+      \strong{Uses}\par Inputs, outputs, and key components.
     \end{column}
   \end{columns}
   \framesource{Adapted from Paper Fig. 2; Sec. 3.1, Eq. 1}
+\end{frame}
+
+% Equation frame: every symbol newly introduced here is defined in the single
+% notationbox directly below the formulas, and nowhere else (not in bullets,
+% prose, or captions). Full audit in SOURCES.md. Delete when not needed.
+\begin{frame}{Training fits the predictor to targets}
+  \begin{equation*}
+    \widehat y_t=f_\theta(x_{1:t},c),
+    \qquad
+    \theta^\star=\arg\min_\theta \mathcal L(\widehat y_t,y_t)
+  \end{equation*}
+  \begin{notationbox}
+    \nt{$x_{1:t}$}{observed inputs up to step $t$}
+    \nt{$c$}{conditioning signal}
+    \nt{$f_\theta$}{the network}
+    \nt{$\theta$}{network weights}
+    \nt{$\widehat y_t,\ y_t$}{prediction and target at step $t$}
+    \nt{$\mathcal L$}{training loss}
+    \nt{$\theta^\star$}{weights that minimize $\mathcal L$}
+  \end{notationbox}
+  \small What minimizing $\mathcal L$ achieves, in one sentence.
+  \framesource{Paper Eq. X and Sec. Y}
 \end{frame}
 
 \section{Evidence}

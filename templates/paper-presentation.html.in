@@ -25,20 +25,13 @@
 <!--
   Notation hover glossary: hovering a symbol in any formula shows its meaning.
   This is only an aid for Q&A and rehearsal. It never replaces on-slide
-  definitions: define every symbol explicitly on the slide where it first
-  appears. Tooltips do not appear in the PDF.
+  definitions: define every symbol in the slide's Notation box on the slide
+  where it first appears. Tooltips do not appear in the PDF. Rows of each
+  Notation box are harvested automatically, so this deck glossary is only for
+  symbols that appear outside any box, e.g. {"\\R": "real numbers"}.
 -->
 <script type="application/json" id="notation">
-{
-  "x_{1:t}":     {"type": "input", "meaning": "Observed sequence up to step $t$."},
-  "c":           {"type": "condition", "meaning": "Conditioning signal."},
-  "f_\\theta":   {"type": "learned function", "meaning": "Network with weights $\\theta$."},
-  "\\widehat y_t": {"type": "prediction", "meaning": "Predicted output at step $t$."},
-  "y_t":         {"type": "target", "meaning": "Ground-truth output at step $t$."},
-  "\\theta":     {"type": "parameters", "meaning": "All learnable weights."},
-  "\\theta^\\star": {"type": "parameters", "meaning": "Weights that minimize $\\mathcal L$."},
-  "\\mathcal L": {"type": "scalar", "meaning": "Training loss."}
-}
+{}
 </script>
 
 <!-- Paste the paper's BibTeX here (only cited keys appear in References). -->
@@ -123,25 +116,33 @@
   </section>
 
   <!--
-    Equation slide. Every symbol must be defined ON THE SLIDE where it first
-    appears (here: the "where" list). Later slides need not repeat it. Also add
-    each symbol to the #notation glossary in <head>; hover is a Q&A aid only.
-    Keep the complete audit (types, shapes, indices) in SOURCES.md.
-    Delete this slide when the equation does not advance the explanation.
+    Equation slide. ALL symbol definitions go in ONE Notation box per slide,
+    always the same box style, always directly below the formula(s), so the
+    audience learns where to look whenever a new formula appears. Define every
+    symbol newly introduced on this slide there, and nowhere else (not in
+    bullets, prose, or captions). A short reminder of an earlier symbol may go
+    in the same box. Keep the complete audit (types, shapes, indices) in
+    SOURCES.md. Delete this slide when the equation does not advance the
+    explanation.
   -->
   <section class="slide" data-section="Method">
     <h2>Training fits the predictor to targets</h2>
-    <div class="equation" id="eq:main">
+    <div class="equation nonumber" id="eq:main">
       \widehat y_t=f_\theta(x_{1:t},c),
       \qquad
       \theta^\star=\arg\min_\theta \mathcal L(\widehat y_t,y_t)
     </div>
-    <p class="small mb-0">where</p>
-    <ul class="plain small mt-0">
-      <li>$x_{1:t}$: observed inputs up to step $t$; $c$: conditioning signal;</li>
-      <li>$f_\theta$: the network with weights $\theta$; $\widehat y_t$: its prediction, $y_t$: the target;</li>
-      <li>$\mathcal L$: training loss; $\theta^\star$: the weights that minimize it.</li>
-    </ul>
+    <div class="block notation-box" data-title="Notation">
+      <table class="notation">
+        <tr><td>$x_{1:t}$</td><td>observed inputs up to step $t$</td></tr>
+        <tr><td>$c$</td><td>conditioning signal</td></tr>
+        <tr><td>$f_\theta$</td><td>the network</td></tr>
+        <tr><td>$\theta$</td><td>network weights</td></tr>
+        <tr><td>$\widehat y_t,\ y_t$</td><td>prediction and target at step $t$</td></tr>
+        <tr><td>$\mathcal L$</td><td>training loss</td></tr>
+        <tr><td>$\theta^\star$</td><td>the weights that minimize $\mathcal L$</td></tr>
+      </table>
+    </div>
     <p class="takeaway">What minimizing $\mathcal L$ achieves, in one sentence.</p>
     <p class="source">Paper Eq. X and Sec. Y</p>
   </section>

@@ -172,7 +172,7 @@ cp -r beamerthemeMBZUAI/ ~/Library/texmf/tex/latex/beamer/
 - compact frame-level source locators;
 - the standard MBZUAI title and closing frames.
 
-`templates/paper-presentation.html.in` is the HTML counterpart, with the same frame patterns, an SVG focus-crop overlay, and a starter notation-hover glossary. Hover is a Q&A aid; the template still defines every symbol on the slide where it first appears. It uses the same placeholders and expects the `html/` directory to be copied to `theme/` next to the deck.
+`templates/paper-presentation.html.in` is the HTML counterpart, with the same frame patterns and an SVG focus-crop overlay. Both templates define every formula symbol in one Notation box per slide (`notationbox` in Beamer, `.block.notation-box` in HTML), always directly below the formulas, with entries in compact columns. In HTML its rows also feed the notation hover, which is a Q&A aid, not a substitute for the box. It uses the same placeholders and expects the `html/` directory to be copied to `theme/` next to the deck.
 
 The `.tex.in` file uses `@@NAME@@` placeholders for the companion initializer. New projects fetch the template and theme from this repository, record the resolved Git commit, and keep a local copy so the generated deck remains reproducible. Existing projects can refresh the theme files without overwriting their paper-specific `main.tex`.
 
