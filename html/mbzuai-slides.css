@@ -222,6 +222,26 @@ body.mbz-print .fragment { opacity: 1 !important; visibility: visible !important
   height: var(--header-rule);
   background: var(--mbz-sand);
 }
+/* Section progress: a dim track with a sand fill (set per slide by the JS) */
+.slide[data-mbz-run] .mbz-header::after { opacity: 0.28; }
+.mbz-header .mbz-progress {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: var(--header-rule);
+  background: var(--mbz-sand);
+  transform-origin: left center;
+  transform: scaleX(var(--mbz-progress, 1));
+  pointer-events: none;
+}
+.slide.mbz-progress-grow .mbz-header .mbz-progress {
+  animation: mbz-progress-grow 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes mbz-progress-grow {
+  from { transform: scaleX(var(--mbz-progress-from, 0)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slide.mbz-progress-grow .mbz-header .mbz-progress { animation: none; }
+}
 .mbz-header .frametitle {
   position: relative;
   flex: 1 1 auto;

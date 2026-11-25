@@ -78,6 +78,7 @@ Logos and the pattern background resolve relative to the theme files, so no othe
 
 Slide attributes:
 - `data-section="Name"` puts the slide in a section. The outline uses it, and it is inherited by later slides until it changes.
+- The sand rule under the banner is a section progress bar: it fills k/n across the n bannered slides of a section and starts over when the section changes (References slides count as their own run).
 - `data-align="top"` (or `bottom`) changes vertical alignment. The default is centered, like Beamer.
 - `data-slide-refs="false"` hides the bottom reference list on this slide.
 - Classes `no-header` and `no-footer`.
