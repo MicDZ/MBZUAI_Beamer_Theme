@@ -71,14 +71,13 @@ Logos and the pattern background resolve relative to the theme files, so no othe
 | Markup | Result |
 |---|---|
 | `<section class="slide title-slide">` with `h1`, `p.subtitle`, `p.author`, `p.presenter`, `p.email`, `p.institute`, `p.venue`, `p.date` | Navy title bar and centered metadata. Long titles shrink automatically. `data-logos="mbzuai rcl"` overrides the logos |
-| `<section class="slide">` with a first-child `<h2>` | Standard frame. The `<h2>` becomes the banner title and shrinks to fit one line. `<h2>Title <small class="framesubtitle">sub</small></h2>` adds a subtitle. A slide with no `<h2>` has no banner |
+| `<section class="slide">` with a first-child `<h2>` | Standard frame. The `<h2>` becomes the banner title and shrinks to fit one line. The sand rule under the banner is a deck progress bar (page / total). `<h2>Title <small class="framesubtitle">sub</small></h2>` adds a subtitle. A slide with no `<h2>` has no banner |
 | `<section class="slide section-slide" data-section="Method">` | Section divider ("Section 2 / Method"). An optional `<p>` becomes the lead text |
 | `<section class="slide references"><h2>References</h2></section>` | Full bibliography of cited works. It continues onto "References (cont.)" slides when it overflows |
 | `<section class="slide closing-slide"></section>` | "Thank You / Questions?" slide that reuses the presenter and institute from the title slide. Put your own `h1`/`p` inside to override |
 
 Slide attributes:
 - `data-section="Name"` puts the slide in a section. The outline uses it, and it is inherited by later slides until it changes.
-- The sand rule under the banner is a section progress bar: it fills k/n across the n bannered slides of a section and starts over when the section changes (References slides count as their own run).
 - `data-align="top"` (or `bottom`) changes vertical alignment. The default is centered, like Beamer.
 - `data-slide-refs="false"` hides the bottom reference list on this slide.
 - Classes `no-header` and `no-footer`.

@@ -15,7 +15,7 @@ A presentation theme based on the **Mohamed bin Zayed University of Artificial I
 - 🎨 Official MBZUAI brand colors
 - 📐 16:9 widescreen layout
 - 🖼️ Frametitle banner with subtle pattern background
-- 📏 Sand rule under the banner doubles as a section progress bar (fills page by page, restarts at each `\section`; needs two LaTeX runs)
+- 📏 Sand rule under the banner doubles as a deck progress bar (page / total; needs two LaTeX runs)
 - 📄 Custom title page and "Thank You" slide
 - 🧱 Styled blocks (standard, alert, example)
 - 📊 Brand-colored tables

@@ -222,8 +222,8 @@ body.mbz-print .fragment { opacity: 1 !important; visibility: visible !important
   height: var(--header-rule);
   background: var(--mbz-sand);
 }
-/* Section progress: a dim track with a sand fill (set per slide by the JS) */
-.slide[data-mbz-run] .mbz-header::after { opacity: 0.28; }
+/* Deck progress: a dim track with a sand fill (set per slide by the JS) */
+.slide.mbz-has-progress .mbz-header::after { opacity: 0.28; }
 .mbz-header .mbz-progress {
   position: absolute;
   left: 0; right: 0; bottom: 0;

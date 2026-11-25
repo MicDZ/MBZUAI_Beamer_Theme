@@ -1451,23 +1451,14 @@
       }
     });
 
-    // Section progress: the sand rule under the banner fills k/n across the
-    // n bannered slides of a section and starts over in the next section.
-    // References (and their continuation slides) form their own run.
-    var runs = [], run = null;
-    slides.forEach(function (s) {
+    // Deck progress: the sand rule under the banner fills page / total,
+    // matching the page number in the footer.
+    slides.forEach(function (s, i) {
       var header = s.querySelector(":scope > .mbz-header");
-      if (!header) { run = null; return; }
-      var key = s.classList.contains("references") ? "\u0000refs" : (s.dataset.mbzSection || "");
-      if (!run || run.key !== key) { run = { key: key, slides: [] }; runs.push(run); }
-      run.slides.push(s);
+      if (!header) return;
       if (!header.querySelector(":scope > .mbz-progress")) header.appendChild(el("span", "mbz-progress"));
-    });
-    runs.forEach(function (r, ri) {
-      r.slides.forEach(function (s, k) {
-        s.dataset.mbzRun = String(ri);
-        s.style.setProperty("--mbz-progress", String((k + 1) / r.slides.length));
-      });
+      s.classList.add("mbz-has-progress");
+      s.style.setProperty("--mbz-progress", String((i + 1) / slides.length));
     });
 
     // Overflow detection
@@ -1622,12 +1613,10 @@
       from.classList.remove("active");
       idx = i;
       var to = slides[idx];
-      // Grow the section progress bar from where the previous slide left it
-      // (or from empty when a new section starts).
+      // Grow the progress bar from where the previous slide left it.
       to.classList.remove("mbz-progress-grow");
-      if (to !== from && to.dataset.mbzRun != null) {
-        var start = from.dataset.mbzRun === to.dataset.mbzRun ? from.style.getPropertyValue("--mbz-progress") : "0";
-        to.style.setProperty("--mbz-progress-from", start || "0");
+      if (to !== from && to.classList.contains("mbz-has-progress")) {
+        to.style.setProperty("--mbz-progress-from", String((slides.indexOf(from) + 1) / slides.length));
         void to.offsetWidth;
         to.classList.add("mbz-progress-grow");
       }

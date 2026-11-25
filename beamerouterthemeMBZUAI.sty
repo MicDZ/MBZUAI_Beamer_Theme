@@ -67,24 +67,22 @@
         \hspace{1.5em}%
     \end{beamercolorbox}%
     \nointerlineskip
-    % Sand separator line doubling as a section progress bar (overlay, no
-    % extra space): a dim track, filled k/n across the n pages of the current
-    % section and starting over at each \section. Needs a second LaTeX run.
-    \mbzuai@sectionprogress
+    % Sand separator line doubling as a deck progress bar (overlay, no extra
+    % space): a dim track filled page / total. Needs a second LaTeX run.
+    \mbzuai@deckprogress
     \tikz[remember picture, overlay]{%
         \fill[mbzuai-sand, opacity=0.28] (current page.north west) ++(0,-2em) rectangle ++(\paperwidth,-1.5pt);
         \fill[mbzuai-sand] (current page.north west) ++(0,-2em) rectangle ++(\mbzuai@progress\paperwidth,-1.5pt);
     }%
 }
 
-% Fraction of the current section shown so far, in \mbzuai@progress.
-% \dohead replays the .nav entries, which set the section's first and last page;
+% Fraction of the deck shown so far, in \mbzuai@progress.
+% \dohead replays the .nav entries, which set the document's last page;
 % its typeset output is thrown away.
-\newcommand{\mbzuai@sectionprogress}{%
+\newcommand{\mbzuai@deckprogress}{%
     \begingroup\setbox\z@\hbox{\dohead}\endgroup
     \pgfmathsetmacro{\mbzuai@progress}{min(1, max(0,
-        (\c@page - \beamer@startpageofsection + 1)
-        / max(1, \beamer@endpageofsection - \beamer@startpageofsection + 1)))}%
+        \c@page / max(1, \beamer@endpageofdocument)))}%
 }
 
 % ── Footer with banner background and customizable content ────────────────────
